@@ -1,9 +1,9 @@
 import React from 'react'
-import { navItems } from './NavItems';
 import { Badge } from '../ui/index';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Key, LogOut } from 'lucide-react';
 import ThemeToggle from '../ui/ThemeToggle';
+import { navItems } from './NavItems';
 
 
 
