@@ -1,4 +1,4 @@
-import { useAuthCallBack } from "@/hooks/authHook";
+// import { useAuthCallBack } from "@/hooks/authHook";
 import { ReactNode, useState, useEffect, useCallback } from "react";
 import type { User_T } from "@/@types/user.t";
 import { UserContext } from "./helper/useAuth";
@@ -10,7 +10,12 @@ const UserProvider = ({children}: {children: ReactNode}) => {
 
   const { isLoaded, isSignedIn } = useAuth();
 
-  const { mutate,isPending,error} = useAuthCallBack();
+  const { mutate, isPending, error } = {
+    mutate: (() => {}),
+    isPending: false,
+    error: null,
+  };
+
 
   const fetchUser = useCallback(() => {
     mutate(undefined, {
