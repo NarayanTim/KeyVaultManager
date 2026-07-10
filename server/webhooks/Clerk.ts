@@ -2,28 +2,35 @@ import type { Request, Response } from "express";
 import env from "../config/env.ts";
 import { resFail, HTTP_STATUS, resSuccess } from "../utils/res.ts";
 import { verifyWebhook } from "@clerk/express/webhooks";
-import { createOrUpdate, createUser, deleteUser } from "../lib/user.service.ts";
+import { createOrUpdate, deleteUser } from "../lib/user.service.ts";
 
-export async function ClerkUserWebhookHandler(req:Request, res:Response, next:NextFunction) {
+export async function ClerkUserWebhookHandler(req:Request, res:Response) {
     try {
         if (!env.CLERK_USER_WEBHOOK) {
             return resFail({res, code:HTTP_STATUS.SERVICE_UNAVAILABLE, message:"Webhook secret is not provide"})
         }
         const payload = req.body instanceof Buffer ? req.body.toString("utf-8") : String(req.body)
-        const request = new Request("http://internal/webhooks/clerk", {
-            method: "POST",
-            headers: new Headers(req.headers as HeadersInit),
-            body:payload
-        })
-        const event = await verifyWebhook(request, { signingSecret: env.CLERK_USER_WEBHOOK })
+        // const request = new Request("http://internal/webhooks/clerk", {
+        //     method: "POST",
+        //     headers: new Headers(req.headers as Record<string, string>),
+        //     body:payload
+        // })
+
+        // const request = new Request("http://internal/webhooks/clerk", {
+        //     method: "POST",
+        //     headers: new Headers(req.headers as HeadersInit),
+        //     body: payload,
+        // });
+
+        // const event = await verifyWebhook(request, { signingSecret: env.CLERK_USER_WEBHOOK })
+        const event = await verifyWebhook(req, { signingSecret: env.CLERK_USER_WEBHOOK })
         if (event.type === "user.created" || event.type === "user.updated") {
-            const _user = event.data;
-            const email = _user.email_addresses.find((e) => e.id === _user.primary_email_address_id)?.email_address ?? _user.email_addresses?.[0]?.email_address
-            
-            const displayName = [_user.first_name, _user.last_name].filter(Boolean).join(" ") || _user.username || null;
+            const user = event.data;
+            const email = user.email_addresses.find((e) =>e.id === user.primary_email_address_id)?.email_address ??user.email_addresses?.[0]?.email_address ??undefined;
+            const displayName = [user.first_name, user.last_name].filter(Boolean).join(" ") || user.username || undefined;
 
             await createOrUpdate({
-                clerkID: _user.id,
+                clerkId: user.id,
                 email: email,
                 name:displayName,
             })

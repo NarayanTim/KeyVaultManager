@@ -1,5 +1,7 @@
 import type { Response } from "express";
-import ENV from "../config/env";
+import type { ZodIssue } from "zod";
+import env from "../config/env.ts";
+
 
 export const HTTP_STATUS = {
     // Success
@@ -57,7 +59,8 @@ interface ResSuccessMessage<T>{
 export const errorMessage = ({res, error} : ErrorMessage)  => {
     const err = error instanceof Error ? error : new Error(String(error));
 
-    const functionName = err.stack?.split("\n")[2].trim().split(" ")[1] ?? "Unknown";
+    const stackLine = err.stack?.split("\n")[2];
+    const functionName = stackLine?.trim().split(" ")[1] ?? "Unknown";
 
     const readString = `Error in [${functionName}] controller: ${err.message}`
 
@@ -88,12 +91,27 @@ export const resSuccess = <T>({res, code, data, message="Process Completed"}: Re
 }
 
 
-export const resZodIssue = (zodIssues:unknown[] | [unknown]) : string[] => {
+// export const resZodIssue = (zodIssues:unknown[] | [unknown]) : string[] => {
+//     const fieldErrors: Record<string, string> = {};
+//     zodIssues?.forEach(err => {
+//         const field = err?.path[0]?.toString() || "general";
+//         if (!fieldErrors[field]) fieldErrors[field] = err?.message || "Unknown";
+//     });
+//     return fieldErrors
+// }
+
+export const resZodIssue = (
+    zodIssues: ZodIssue[]
+): Record<string, string> => {
     const fieldErrors: Record<string, string> = {};
-    console.log(zodIssues)
-    zodIssues?.forEach(err => {
+
+    zodIssues.forEach((err) => {
         const field = err.path[0]?.toString() || "general";
-        if (!fieldErrors[field]) fieldErrors[field] = err.message;
+
+        if (!fieldErrors[field]) {
+            fieldErrors[field] = err.message;
+        }
     });
-    return fieldErrors
-}
+
+    return fieldErrors;
+};

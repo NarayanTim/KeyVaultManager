@@ -8,7 +8,7 @@ const fallbackSalt:number = 10;
 
 type ENVIRONMENT_SETUP = {
     DATABASE_URL?: string;
-    PORT?: number;
+    PORT: number;
     ENVIRONMENT?: 'DEVELOPMENT' | 'PRODUCTION';
     JWT_SECRET_KEY? : string;
     SALT_ROUNDS?: number;

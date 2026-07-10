@@ -1,5 +1,5 @@
 import {unique, pgTable, text, timestamp, uuid, boolean } from "drizzle-orm/pg-core";
-import { projects } from "./project.model";
+import { projects } from "./Project.model.ts";
 
 export const projectKeys = pgTable("project_keys", {
     id: uuid("id").primaryKey().defaultRandom(),

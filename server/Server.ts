@@ -2,13 +2,17 @@ import express from "express"
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { ClerkUserWebhookHandler } from "./webhooks/Clerk.ts";
-import env from "./config/env";
-import { clerkMiddleware } from '@clerk/express'
-import { userRoute, projectRoute, membershipRoute, secretRoute } from "./routes";
-import { errorHandler } from "./middlewares/error.middleware";
+import env from "./config/env.ts";
 
-import fs from "node:fs"
-import ptah from "node:path"
+import { clerkMiddleware } from '@clerk/express'
+// import { userRoute, projectRoute, membershipRoute, secretRoute } from "./routes/index.ts";
+
+import { errorHandler } from "./middlewares/error.middleware.ts";
+
+
+import fs from "node:fs";
+import path from "node:path";
+
 
 
 const app = express()
@@ -51,13 +55,13 @@ app.get("/", (req, res) => {
 
 
 
-app.use("/api/auth", userRoute)
-app.use("/api/projects", projectRoute)
-app.use("/api/secret", secretRoute)
-app.use("/api/membership", membershipRoute)
+// app.use("/api/auth", userRoute)
+// app.use("/api/projects", projectRoute)
+// app.use("/api/secret", secretRoute)
+// app.use("/api/membership", membershipRoute)
 app.use(errorHandler)
 
-const publicDirectory = ptah.join(process.cwd(), "public")
+const publicDirectory = path.join(process.cwd(), "public")
 if (fs.existsSync(publicDirectory)) {
     app.use(express.static(publicDirectory))
     app.get("/{*any}", (req, res, next) => {
@@ -71,7 +75,7 @@ if (fs.existsSync(publicDirectory)) {
             return;
         }
 
-        res.sendFile(path.join(publicDir, "index.html"), (err) => next(err));
+        res.sendFile(path.join(publicDirectory, "index.html"), (err) => next(err));
     });
 }
 

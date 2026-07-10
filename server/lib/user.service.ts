@@ -1,11 +1,11 @@
 import { eq } from "drizzle-orm";
-import db from "../config/db";
+import db from "../config/db.ts";
 import { users } from "../models/Users.model.ts";
 
 
 export const getUserWithClerkID = async (clerkID: string) => {
     return await db.query.users.findFirst({
-        where: eq(users.clerkId, clerkId),
+        where: eq(users.clerkId, clerkID),
     });
     
 }
@@ -18,24 +18,42 @@ export const getUserWithID = async (userId: string) => {
 
 export const createUser = async ({clerkID, name, email}:{clerkID:string, name?:string, email?:string}) => {
     const [user] = await db.insert(users).values({
-        clerkId,
+        clerkId:clerkID,
         email,
         name
     }).returning();
     return user
 }
 
-export const createOrUpdate = async({ clerkID, name, email }: { clerkID: string, name?: string, email?: string }) => {
-    const [user] = await db.insert(users).values({
-        clerkId,
-        email,
-        name
-    }).onConflictDoUpdate({
-        target: clerkID,
-        set:{email, name, updatedAt: new Date()}
+export const createOrUpdate = async ({
+  clerkId,
+  name,
+  email,
+}: {
+  clerkId: string;
+  name?: string;
+  email?: string;
+}) => {
+  const [user] = await db
+    .insert(users)
+    .values({
+      clerkId,
+      email,
+      name,
     })
-}
+    .onConflictDoUpdate({
+      target: users.clerkId,
+      set: {
+        email,
+        name,
+        updatedAt: new Date(),
+      },
+    })
+    .returning();
 
-export const deleteUser = async (clerkId) => {
+  return user;
+};
+
+export const deleteUser = async (clerkId:string) => {
     await db.delete(users).where(eq(users.clerkId, clerkId))
 }

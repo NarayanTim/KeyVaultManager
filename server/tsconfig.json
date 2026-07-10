@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
         // Environment setup & latest features
-        "lib": ["ES2022", "ESNext"],
         "target": "ES2022",
         "module": "Nodenext",
         "moduleDetection": "force",

@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, uuid, boolean, pgEnum, integer } from "drizzle-orm/pg-core";
-import { users } from "./Users.model"
+import { users } from "./Users.model.ts"
 
 /**
  * Membership / Subscription state — mirrors Clerk Billing's Subscription

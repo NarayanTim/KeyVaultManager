@@ -1,5 +1,5 @@
 import type {Request, Response, NextFunction,} from "express";
-import ENV from "../config/env";
+import env from "../config/env.ts";
 
 export const errorHandler = (error: Error, _req: Request, res: Response, _next: NextFunction) => {
     const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
@@ -8,7 +8,7 @@ export const errorHandler = (error: Error, _req: Request, res: Response, _next: 
     res.status(statusCode).json({
         success: false,
         message: error.message || "Internal Server Error",
-        ...(ENV.ENVIRONMENT === "DEVELOPMENT" && {
+        ...(env.ENVIRONMENT === "DEVELOPMENT" && {
             stack: error.stack,
         }),
     });

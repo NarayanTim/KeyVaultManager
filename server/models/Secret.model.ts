@@ -1,5 +1,5 @@
 import { pgTable, unique, text, timestamp, uuid, integer, boolean } from "drizzle-orm/pg-core";
-import { projects } from "./project.model";
+import { projects } from "./Project.model.ts";
 
 
 export const secrets = pgTable("secrets", {
