@@ -1,8 +1,6 @@
 import { DashboardLayout } from '@/components/layout/index'
 import React from 'react'
-import {KPI_CARDS, AddProject} from './../components/min/Dashboard/index';
-
-
+import { KPI_CARDS, AddProject } from './../components/min/Dashboard/index';
 
 
 
