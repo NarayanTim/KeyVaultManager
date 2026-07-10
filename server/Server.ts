@@ -2,11 +2,13 @@ import express from "express"
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { ClerkUserWebhookHandler } from "./webhooks/Clerk.ts";
-// import ENV from "./config/env";
 import env from "./config/env";
 import { clerkMiddleware } from '@clerk/express'
 import { userRoute, projectRoute, membershipRoute, secretRoute } from "./routes";
 import { errorHandler } from "./middlewares/error.middleware";
+
+import fs from "node:fs"
+import ptah from "node:path"
 
 
 const app = express()
@@ -16,7 +18,7 @@ console.log("Server file loaded");
 
 const rawJson = express.raw({type: "application/json", limit : "1mb"})
 
-app.post("/webhook/user", rawJson, (req, res) => {
+app.post("/webhooks/user", rawJson, (req, res) => {
     void ClerkUserWebhookHandler(req, res)
 })
 
@@ -53,25 +55,44 @@ app.use("/api/auth", userRoute)
 app.use("/api/projects", projectRoute)
 app.use("/api/secret", secretRoute)
 app.use("/api/membership", membershipRoute)
-
 app.use(errorHandler)
 
-
-const startServer = async ():Promise<void> => {
-    try {
-        console.log(`PostgreSQL connected successfully`);
-        app.listen(PORT, () => {
-            console.log(`Server is running on PORT = ${PORT}`);
-        });
-    } catch (error) {
-        if (error instanceof Error) {
-            console.error("Error during server startup:", error.message);
-        } else {
-            console.error("Error during server startup:", error);
+const publicDirectory = ptah.join(process.cwd(), "public")
+if (fs.existsSync(publicDirectory)) {
+    app.use(express.static(publicDirectory))
+    app.get("/{*any}", (req, res, next) => {
+        if (req.method !== "GET" && req.method !== "HEAD") {
+            next();
+            return;
         }
-        process.exit(1);
-    }
+
+        if (req.path.startsWith("/api") || req.path.startsWith("/webhooks")) {
+            next();
+            return;
+        }
+
+        res.sendFile(path.join(publicDir, "index.html"), (err) => next(err));
+    });
 }
 
 
-await startServer()
+// const startServer = async ():Promise<void> => {
+//     try {
+//         console.log(`PostgreSQL connected successfully`);
+//         app.listen(PORT, () => {
+//             console.log(`Server is running on PORT = ${PORT}`);
+//         });
+//     } catch (error) {
+//         if (error instanceof Error) {
+//             console.error("Error during server startup:", error.message);
+//         } else {
+//             console.error("Error during server startup:", error);
+//         }
+//         process.exit(1);
+//     }
+// }
+
+
+// await startServer()
+
+app.listen(PORT, () => {console.log(`Server is running on PORT = ${PORT}`)});

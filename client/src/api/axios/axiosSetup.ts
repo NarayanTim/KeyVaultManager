@@ -5,9 +5,10 @@ import { useCallback } from "react";
 
 const INTERNAL_ERROR = "Internal Error";
 
-const backendPort = Number(import.meta.env.VITE_BACKEND_BASE_PORT) || 4000;
+// const backendPort =  4000;
 
-const BASE_URL = `${import.meta.env.VITE_BASE_API_URL}${backendPort}/api`;
+// const BASE_URL = `${import.meta.env.VITE_API_URL}${backendPort}/api`;
+const BASE_URL = `${import.meta.env.VITE_API_URL}`;
 console.log(BASE_URL + " URL ")
 
 export const api = axios.create({
