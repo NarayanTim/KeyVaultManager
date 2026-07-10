@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button, Input } from '../ui';
+import Input from './../forms/input';
+import Button from './Button';
 
 
 interface Column<T> {
@@ -160,7 +161,7 @@ const DataTable = <T extends object>({
           </p>
           <div className="flex items-center gap-1">
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => onPageChange?.(currentPage - 1)}
               disabled={currentPage <= 1}
@@ -181,7 +182,7 @@ const DataTable = <T extends object>({
               return (
                 <Button
                   key={page}
-                  variant={page === currentPage ? 'primary' : 'outline'}
+                  variant={page === currentPage ? 'primary' : 'ghost'}
                   size="sm"
                   onClick={() => onPageChange?.(page)}
                 >
@@ -190,7 +191,7 @@ const DataTable = <T extends object>({
               );
             })}
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => onPageChange?.(currentPage + 1)}
               disabled={currentPage >= totalPages}

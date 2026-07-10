@@ -51,7 +51,7 @@ icon: Code,
 
 
 
-export const codeExample = `# Install the SDK
+export const codeExample:string = `# Install the SDK
 npm install @envkey/sdk
 
 # Use in your app

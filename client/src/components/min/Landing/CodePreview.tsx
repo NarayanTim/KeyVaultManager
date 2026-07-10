@@ -1,6 +1,6 @@
 import React from 'react'
 
-const CodePreview = ({codeExample}:string) => {
+const CodePreview = ({codeExample}:{codeExample:string}) => {
   return (
           <div className="mt-16 max-w-3xl mx-auto">
             <div className="bg-secondary-900 dark:bg-secondary-950 rounded-xl border border-secondary-800 overflow-hidden shadow-2xl">

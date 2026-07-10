@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Button } from '../ui/index';
 import { Folder, X } from 'lucide-react';
 import BaseModal from './BaseModal';
-import { validate } from '@/lib/helper';
+// import { validate } from '@/lib/helper';
 import Input from '../forms/input';
 
 
@@ -25,7 +25,7 @@ const AddProjectModal = ({ isOpen, onClose, onSuccess }: AddProjectModalProps) =
     const inputRef = useRef<HTMLInputElement>(null);
     const isPending = false
     const isError = false
-    const error = "Fail"
+    // const error = "Fail"
     // const reset = false
  
 //   const { mutate: createProject, isPending, isError, error, reset } = null
@@ -50,19 +50,22 @@ const AddProjectModal = ({ isOpen, onClose, onSuccess }: AddProjectModalProps) =
 //   }, [isOpen, reset]);
  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-      if (fieldError) setFieldError(validate(e.target.value));
-      onSuccess()
+    const _T = e;
+    console.log(_T)
+    setName("_T");
+    setFieldError("Fail")
+    //   if (fieldError) setFieldError(validate(e.target.value));
+      onSuccess("1")
   };
  
   const handleSubmit = () => {
-      const err = validate(name);
+    //   const err = validate(name);
     
-    if (err) {
-      setFieldError(err);
-      inputRef.current?.focus();
-      return;
-    }
+    // if (err) {
+    //   setFieldError(err);
+    //   inputRef.current?.focus();
+    //   return;
+    // }
     // createProject({ name: name.trim() });
   };
  
@@ -118,7 +121,7 @@ const AddProjectModal = ({ isOpen, onClose, onSuccess }: AddProjectModalProps) =
         {/* ── Server error banner ── */}
         {isError && (
           <p className="text-sm text-error-600 dark:text-error-400 bg-error-50 dark:bg-error-900/20 px-3 py-2 rounded-lg">
-            {(error as Error)?.message ?? 'Something went wrong. Please try again.'}
+            {'Something went wrong. Please try again.'}
           </p>
         )}
  
@@ -127,7 +130,7 @@ const AddProjectModal = ({ isOpen, onClose, onSuccess }: AddProjectModalProps) =
           <Button variant="secondary" onClick={onClose} disabled={isPending}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleSubmit} loading={isPending}>
+          <Button variant="primary" onClick={handleSubmit} isLoading={isPending}>
             Create project
           </Button>
         </div>

@@ -54,11 +54,11 @@ const Sidebar = () => {
           <span className="text-xs font-medium text-secondary-600 dark:text-secondary-400">
             Current Plan
           </span>
-          <Badge variant={currentUser?.subscription_tier === 'free' ? 'secondary' : 'primary'} size="sm">
-            {currentUser?.subscription_tier?.toUpperCase() || 'FREE'}
+          <Badge variant={'primary'} size="sm">
+            {'FREE'}
           </Badge>
         </div>
-        {currentUser?.subscription_tier === 'free' && (
+        {/* {currentUser?.subscription_tier === 'free' && (
           <NavLink
             to="/dashboard#plans"
             className="flex items-center gap-1.5 text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline mt-2"
@@ -66,7 +66,7 @@ const Sidebar = () => {
             <Zap className="w-3.5 h-3.5" />
             Upgrade for more features
           </NavLink>
-        )}
+        )} */}
       </div>
 
       {/* User Section */}

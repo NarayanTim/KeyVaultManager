@@ -1,7 +1,8 @@
 
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Button } from '../ui';
 import BaseModal from './BaseModal';
+import { AlertTriangle } from 'lucide-react';
 
 
 
@@ -61,7 +62,7 @@ const ConfirmModal = ({
           <Button
             variant={variant === 'danger' ? 'danger' : 'primary'}
             onClick={onConfirm}
-            loading={loading}
+            isLoading={loading}
           >
             {confirmText}
           </Button>
