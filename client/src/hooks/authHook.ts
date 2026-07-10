@@ -4,9 +4,9 @@
 
 
 
-export const useAuthCallBack = () => {
-    const {apiWithAuth} = useApi()
-    return useMutation({
-        mutationFn: () => authCallback(apiWithAuth),
-    })
-}
+// export const useAuthCallBack = () => {
+//     const {apiWithAuth} = useApi()
+//     return useMutation({
+//         mutationFn: () => authCallback(apiWithAuth),
+//     })
+// }
