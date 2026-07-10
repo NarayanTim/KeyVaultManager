@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { ClerkUserWebhookHandler } from "./webhooks/Clerk.ts";
 import env from "./config/env.ts";
+import job from "./config/cron.ts";
 
 import { clerkMiddleware } from '@clerk/express'
 // import { userRoute, projectRoute, membershipRoute, secretRoute } from "./routes/index.ts";
@@ -44,14 +45,11 @@ app.use(clerkMiddleware())
 
 app.use(cookieParser());
 
-app.get("/test", (req, res) => {
+app.get("/health", (req, res) => {
     res.json({ status: "ok", message: "Server is running" });
 });
 
-app.get("/", (req, res) => {
-    res.send("Server working");
-    console.log("REQUEST:", req.method, req.url);
-});
+
 
 
 
@@ -100,4 +98,10 @@ if (fs.existsSync(publicDirectory)) {
 
 // await startServer()
 
-app.listen(PORT, () => {console.log(`Server is running on PORT = ${PORT}`)});
+app.listen(PORT, () => {
+    console.log(`Server is running on PORT = ${PORT}`)
+    if (env.ENVIRONMENT === "PRODUCTION") {
+        job.start()
+    }
+
+});

@@ -20,6 +20,7 @@ type ENVIRONMENT_SETUP = {
     CLERK_PUBLISHABLE_KEY?: string;
     CLERK_SECRET_KEY?: string;
     CLERK_USER_WEBHOOK?: string;
+    FRONTEND_URL? : string;
 
 }
 
@@ -32,6 +33,7 @@ const env : ENVIRONMENT_SETUP = {
     JWT_SECRET_KEY : process.env.JWT_SECRET_KEY,
     MASTER_ENCRYPTION_KEY : process.env.MASTER_ENCRYPTION_KEY,
     CLERK_USER_WEBHOOK : process.env.CLERK_USER_WEBHOOK,
+    FRONTEND_URL : process.env.FRONTEND_URL,
 
 }
 // const env = ENV

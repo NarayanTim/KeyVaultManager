@@ -5,14 +5,6 @@ import { verifyWebhook } from "@clerk/express/webhooks";
 import { createOrUpdate, deleteUser } from "../lib/user.service.ts";
 
 
-
-import type { Request, Response } from "express";
-import { verifyWebhook } from "@clerk/express/webhooks";
-
-import env from "../config/env.ts";
-import { resFail, HTTP_STATUS, resSuccess } from "../utils/res.ts";
-import { createOrUpdate, deleteUser } from "../lib/user.service.ts";
-
 export async function ClerkUserWebhookHandler(req: Request,res: Response) {
   try {
     if (!env.CLERK_USER_WEBHOOK) {
