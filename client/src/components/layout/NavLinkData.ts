@@ -1,4 +1,4 @@
-import { Key, FolderKanban, BookOpen, User, LogOut, Zap } from 'lucide-react';
+import { Key, FolderKanban, BookOpen} from 'lucide-react';
 
 
 
