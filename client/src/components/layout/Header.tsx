@@ -3,9 +3,9 @@ import Button from '../ui/Button';
 import ThemeToggle from '../ui/ThemeToggle';
 import { Link } from 'react-router-dom';
 import {Key} from 'lucide-react';
-import { SignInButton, SignUpButton, } from '@clerk/react'
+import { SignInButton, SignUpButton, Show} from '@clerk/react'
 
-// https://test-user.com
+
 
 
 const Header = () => {
@@ -36,7 +36,9 @@ const Header = () => {
             </div>
 
             <div className="flex items-center gap-4">
-              <ThemeToggle />
+                <ThemeToggle />
+              <Show when={"signed-out"}>
+                  
               <SignInButton mode='modal'>
                 <Button variant="ghost" size="sm">Sign In</Button>
               </SignInButton>
@@ -45,6 +47,7 @@ const Header = () => {
                 <SignUpButton mode="modal">
                   <Button size="sm">Get Started</Button>
               </SignUpButton>
+              </Show>
             </div>
           </div>
         </div>

@@ -23,6 +23,7 @@ console.log("Server file loaded");
 const rawJson = express.raw({type: "application/json", limit : "1mb"})
 
 app.post("/webhooks/user", rawJson, (req, res) => {
+    console.log("Test 1 Love")
     void ClerkUserWebhookHandler(req, res)
 })
 
