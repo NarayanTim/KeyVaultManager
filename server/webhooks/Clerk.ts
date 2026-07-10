@@ -4,12 +4,14 @@ import { resFail, HTTP_STATUS, resSuccess } from "../utils/res.ts";
 import { verifyWebhook } from "@clerk/express/webhooks";
 import { createOrUpdate, deleteUser } from "../lib/user.service.ts";
 
+
+
 export async function ClerkUserWebhookHandler(req:Request, res:Response) {
     try {
         if (!env.CLERK_USER_WEBHOOK) {
             return resFail({res, code:HTTP_STATUS.SERVICE_UNAVAILABLE, message:"Webhook secret is not provide"})
         }
-        const payload = req.body instanceof Buffer ? req.body.toString("utf-8") : String(req.body)
+        // const payload = req.body instanceof Buffer ? req.body.toString("utf-8") : String(req.body)
         // const request = new Request("http://internal/webhooks/clerk", {
         //     method: "POST",
         //     headers: new Headers(req.headers as Record<string, string>),
