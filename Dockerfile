@@ -28,10 +28,10 @@ FROM node:22-bookworm-slim AS runner
 WORKDIR /app
 ENV ENVIRONMENT=PRODUCTION
 
-COPY backend/package.json backend/package-lock.json ./
+COPY server/package.json server/package-lock.json ./
 RUN npm install --omit=dev --no-audit --no-fund && npm cache clean --force
 
-COPY --from=client-build /app/dist ./dist
+COPY --from=server-build /app/dist ./dist
 COPY --from=client-build /app/client/dist ./public
 
 EXPOSE 3001
