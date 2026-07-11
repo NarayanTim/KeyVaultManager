@@ -1,114 +1,135 @@
-// import { and, eq, sql } from "drizzle-orm";
-// import db from "../config/db";
-// import { projects } from "../models/Project.model";
-// import { projectKeys } from "../models/ProjectKey.model";
-// // import { createAPIKey, hashAPIKey } from "../utils/security";
+import { and, eq, sql } from "drizzle-orm";
+import db from "../config/db.ts";
+import { projects } from "../models/Project.model.ts";
+import { projectKeys } from "../models/ProjectKey.model.ts";
+import { createAPIKey, hashAPIKey } from "../utils/security.ts";
 
-// // Check Safe
+type UserId = string;
+type ProjectId = string;
 
-// // export const getUserProjects = async ({userId,filterKey,}: {userId: string;filterKey?: boolean}) => {
-// export const getUserProjects = async (userId: string, filterKey?: boolean) => {
-//     return await db.query.projects.findMany({
-//         columns: {
-//             name: true,
-//             isActive: true,
-//             id: true,
-//             createdAt: true,
-//         },
-//         // filterKey was previously accepted but unused — wired in here as
-//         // "only return active projects when true". Adjust if you meant
-//         // something else (e.g. only projects that HAVE a key row).
-//         where: filterKey ? and(eq(projects.userId, userId), eq(projects.isActive, true)) : eq(projects.userId, userId),
-//         orderBy: (projects, { desc }) => [desc(projects.createdAt)],
-//     });
-// };
+interface NewProjectInput{
+    name: string;
+    userId: UserId;
+    isActive?: boolean;
+}
 
-// export const getUserProject = async (userId, projectId) => {
-//     return await db.query.projects.findFirst({
-//         where: and(
-//             eq(projects.userId, userId),
-//             eq(projects.id, projectId),
-//         )
-//     })
-// }
+interface NewProjectResult{
+    id: string;
+    name: string;
+    key: string;
+    hashKey: string;
 
-// export const addNewProject = async ({name, userId, isActive}:{name:string, userId:string, isActive?:boolean}) => {
+}
+
+interface RotatedKeyResult {
+    keyHash: string;
+    plainKey: string;
+}
+
+type ProjectListItem = Pick<Project, "id" | "name" | "isActive" | "createdAt">;
+
+export const getUserProjects = async (userId: UserId, filterKey?: boolean): Promise<ProjectListItem[]> => {
+    return await db.query.projects.findMany({
+        columns: {
+            name: true,
+            isActive: true,
+            id: true,
+            createdAt: true,
+        },
+        // filterKey was previously accepted but unused — wired in here as
+        // "only return active projects when true". Adjust if you meant
+        // something else (e.g. only projects that HAVE a key row).
+        where: filterKey ? and(eq(projects.userId, userId), eq(projects.isActive, true)) : eq(projects.userId, userId),
+        orderBy: (projects, { desc }) => [desc(projects.createdAt)],
+    });
+};
+
+export const getUserProject = async (userId:UserId, projectId:ProjectId):Promise<Project | undefined> => {
+    return await db.query.projects.findFirst({
+        where: and(
+            eq(projects.userId, userId),
+            eq(projects.id, projectId),
+        )
+    })
+}
+
+export const addNewProject = async ({name, userId, isActive}:NewProjectInput) : Promise<NewProjectResult> => {
     
-//     const [newProject] = await db.insert(projects).values({
-//         name,
-//         userId,
-//         isActive: isActive ?? true,
-//     }).returning();
+    const [newProject] = await db.insert(projects).values({
+        name,
+        userId,
+        isActive: isActive ?? true,
+    }).returning();
 
-//     if (!newProject) {
-//         throw new Error("Failed to create project");
-//     }
-
-
-//     const apiKey = await createAPIKey()
-//     const keyHash  = await hashAPIKey(apiKey)
-//     const [projectKey] = await db.insert(projectKeys).values({
-//         projectId:newProject?.id,
-//         keyHash,
-//     }).returning()
-
-//     return {
-//         id:newProject.id,
-//         name:newProject.name,
-//         key:apiKey,
-//         hashKey:projectKey?.keyHash
-//     }
-
-// }
+    if (!newProject) {
+        throw new Error("Failed to create project");
+    }
 
 
-// // Create new project key
+    const apiKey = await createAPIKey()
+    const keyHash  = await hashAPIKey(apiKey)
+    const [projectKey] = await db.insert(projectKeys).values({
+        projectId:newProject?.id,
+        keyHash,
+    }).returning()
 
-// export const generateNewProjectKey = async ({ projectId }: { projectId: string; }) => {
-//     const existing = db.query.projectKeys.findFirst({
-//         where: eq(projectKeys.projectId, projectId),
-//     })
+    return {
+        id:newProject.id,
+        name:newProject.name,
+        key:apiKey,
+        hashKey:projectKey?.keyHash
+    }
 
-//     if (!existing) return null;
+}
 
-//     const newKey = await createAPIKey();
-//     const newKeyHash = await hashAPIKey(newKey)
+
+// Create new project key
+
+export const generateNewProjectKey = async (projectId:ProjectId):Promise<RotatedKeyResult | null> => {
+    const existing = await db.query.projectKeys.findFirst({
+        where: eq(projectKeys.projectId, projectId),
+    })
+
+    if (!existing) return null;
+
+    const newKey = await createAPIKey();
+    const newKeyHash = await hashAPIKey(newKey)
     
-//     const [updateKey] = await db
-//         .update(projectKeys)
-//         .set({keyHash: newKeyHash,lastUsedAt:null,})
-//         .where(eq(projectKeys.projectId, projectId))
-//         .returning();
+    const [updateKey] = await db
+        .update(projectKeys)
+        .set({keyHash: newKeyHash,lastUsedAt:null,})
+        .where(eq(projectKeys.projectId, projectId))
+        .returning();
     
-//     if(!updateKey) return null
+    if(!updateKey) return null
 
-//     return {
-//         keyHash: updateKey.keyHash,
-//         plainKey:newKey,
-//     };
-// }
+    return {
+        keyHash: updateKey.keyHash,
+        plainKey:newKey,
+    };
+}
 
 
-// // ─── Toggle Active ────────────────────────────────────────────────────────────
+// ─── Toggle Active ────────────────────────────────────────────────────────────
 
-// export const updateState = async ({ projectId, userId }: { projectId: string; userId: string }) => {
-//     const existing = await db.query.projects.findFirst({
-//         where: and(
-//             eq(projects.id, projectId),
-//             eq(projects.userId, userId)
-//         ),
-//     });
+export const updateState = async ({ projectId, userId }: { projectId: ProjectId; userId: UserId }): Promise<Project | null> => {
+    const existing = await db.query.projects.findFirst({
+        where: and(
+            eq(projects.id, projectId),
+            eq(projects.userId, userId)
+        ),
+    });
 
-//     if (!existing) return null;
+    if (!existing) return null;
 
-//     const [updated] = await db
-//         .update(projects).set({isActive:  !existing.isActive,updatedAt: new Date()}).where(and(eq(projects.id, projectId), eq(projects.userId, userId)))
-//         .returning();
+    const [updated] = await db
+        .update(projects).set({isActive:  !existing.isActive,updatedAt: new Date()}).where(and(eq(projects.id, projectId), eq(projects.userId, userId)))
+        .returning();
 
-//     return updated;
-// };
+    return updated ?? null;
+};
 
-// export const deleteUserProject = async ({ userId, projectId }: { userId: string; projectId: string }) => {
-//     const [deleted] = await db.delete(projects).where(and(eq(projects.userId, userId), eq(projects.id, projectId))).returning();
-//     return deleted;
-// }
+export const deleteUserProject = async ({ userId, projectId }: { userId: UserId; projectId: ProjectId }):Promise<Project | null> => {
+    const [deleted] = await db.delete(projects).where(and(eq(projects.userId, userId), eq(projects.id, projectId))).returning();
+    return deleted ?? null;
+}

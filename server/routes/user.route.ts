@@ -1,14 +1,11 @@
-// import { Router } from "express";
-// import { protectRoute } from "../middlewares/auth";
-// import { getProfile, getCallback } from "../controllers/user.controller";
-
-
-// const router = Router();
-
-
-// router.get("/profile", protectRoute, getProfile)
-// router.post("/callback", getCallback)
+import { Router } from "express";
+import { protectRoute } from "../middlewares/auth.ts";
+import { getProfile } from "../controllers/user.controller.ts";
 
 
 
-// export default router;
+const router = Router();
+router.get("/profile", protectRoute, getProfile)
+
+
+export default router;

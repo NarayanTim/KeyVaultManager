@@ -7,6 +7,7 @@ import job from "./config/cron.ts";
 
 import { clerkMiddleware } from '@clerk/express'
 // import { userRoute, projectRoute, membershipRoute, secretRoute } from "./routes/index.ts";
+import { userRoute, projectRoute} from "./routes/index.ts";
 
 import { errorHandler } from "./middlewares/error.middleware.ts";
 
@@ -24,7 +25,6 @@ console.log("Server file loaded");
 const rawJson = express.raw({type: "application/json", limit : "1mb"})
 
 app.post("/webhooks/user", rawJson, (req, res) => {
-    console.log("Test 1 Love")
     void ClerkUserWebhookHandler(req, res)
 })
 
@@ -54,8 +54,8 @@ app.get("/health", (req, res) => {
 
 
 
-// app.use("/api/auth", userRoute)
-// app.use("/api/projects", projectRoute)
+app.use("/api/auth", userRoute)
+app.use("/api/projects", projectRoute)
 // app.use("/api/secret", secretRoute)
 // app.use("/api/membership", membershipRoute)
 app.use(errorHandler)

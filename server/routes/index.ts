@@ -1,14 +1,14 @@
-// import userRoute from "./user.route.ts"
+import userRoute from "./user.route.ts"
+import projectRoute from "./projects.route"
 // import secretRoute from "./secret.route"
-// import projectRoute from "./projects.route"
 // import membershipRoute from "./membership.route"
 
-// export {
+export {
 
-// userRoute,
+userRoute,
+projectRoute,
 // secretRoute,
-// projectRoute,
 // membershipRoute,
 
 
-// }
+}
