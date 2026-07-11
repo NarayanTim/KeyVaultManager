@@ -21,32 +21,3 @@ export const getProfile = async (req:AuthRequest, res:Response, next:NextFunctio
         next(error)
     }
 }
-
-// export const getCallback = async (req: Request, res: Response, next:NextFunction) => {
-//     try {
-//         console.log("========== CALLBACK HIT ==========");
-//         const { userId: clerkID } = getAuth(req)
-        
-//         if (!clerkID) {
-//             return resFail({res, code:HTTP_STATUS.UNAUTHORIZED, message:"Unauthorized"})
-//         }
-        
-//         let user = await getUserWithClerkID(clerkID)
-//         if (!user) {
-//             const clerkUser = await clerkClient.users.getUser(clerkID)
-            
-//             user = await createUser({
-//                 clerkID, 
-//                 name: clerkUser.firstName ? `${clerkUser.firstName} ${clerkUser.lastName || ""}`.trim()
-//                     : clerkUser.emailAddresses[0]?.emailAddress?.split("@")[0],
-//                 email: clerkUser.emailAddresses[0]?.emailAddress,
-//             })
-
-//         }
-//         resSuccess({res, code:HTTP_STATUS.OK, data:{user}})
-        
-//     } catch (error) {
-//         next(error)
-        
-//     }
-// }
