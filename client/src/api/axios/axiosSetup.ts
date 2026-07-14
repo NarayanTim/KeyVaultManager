@@ -5,10 +5,11 @@ import { useCallback } from "react";
 
 const INTERNAL_ERROR = "Internal Error";
 
-// const backendPort =  4000;
 
-// const BASE_URL = `${import.meta.env.VITE_API_URL}${backendPort}/api`;
-const BASE_URL = `${import.meta.env.VITE_API_URL}`;
+
+
+const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+
 console.log(BASE_URL + " URL ")
 
 export const api = axios.create({
@@ -49,33 +50,6 @@ export const useApi = () => {
 
 
 
-// export const useApi = () => {
-//   const { getToken } = useAuth();
-
-//   const apiWithAuth = useCallback(
-//     async <T = unknown>(
-//       config: AxiosRequestConfig
-//     ): Promise<AxiosResponse<T>> => {
-//       const token = await getToken();
-
-//       return api.request<T>({
-//         ...config,
-//         headers: {
-//           ...config.headers,
-//           ...(token && {
-//             Authorization: `Bearer ${token}`,
-//           }),
-//         },
-//       });
-//     },
-//     [getToken]
-//   );
-
-//     return {
-//         api,
-//         apiWithAuth,
-//     };
-// };
 
 
 export type ApiWithAuth = <T = unknown>(config: AxiosRequestConfig) => Promise<AxiosResponse<T>>;
