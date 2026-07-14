@@ -13,11 +13,11 @@ export const getProfile = async (req:AuthRequest, res:Response, next:NextFunctio
             return resFail({res,code: HTTP_STATUS.UNAUTHORIZED,message: "Unauthorized"});
         }
         const user = await getUserWithID(userId)
-        console.log("User: " + user)
+        console.log("User: " + JSON.stringify(user, null, 2))
         if (!user) {
             return resFail({res, code:HTTP_STATUS.NOT_FOUND, message:"User not found"})
         }
-        console.log("User: " + user)
+        console.log("User: " + JSON.stringify(user, null, 2))
         return resSuccess({res, code:HTTP_STATUS.ACCEPTED, data:{user}})
         
     } catch (error) {

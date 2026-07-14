@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 import { useUserProfile } from "@/hooks/authHook";
-import { UserContext } from "./helper/useAuth";
+import { UserContext } from "./helper/useUser";
 
 
 export const UserProvider = ({children}: {children: ReactNode}) => { 
