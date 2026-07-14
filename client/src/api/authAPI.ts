@@ -10,6 +10,7 @@ export const getUserProfile = async (apiWithAuth:ApiWithAuth) => {
             url: endpoint,
             method: "GET"
         })
+        console.log(response.data.user + " --- ")
         return response.data.user
     } catch (error) {
         return handleApiError(error);
