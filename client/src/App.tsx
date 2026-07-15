@@ -1,14 +1,11 @@
-import {Landing, Dashboard} from "./pages/index"
+import GlobalRouter from "./lib/GlobalRouter";
+
 
 function App() {
-  const test = false;
   return (
-    <div>
-      {/* <Header /> */}
-      {
-        test ? <Dashboard/> : <Landing/>
-      }
-    </div>
+    <>
+      <GlobalRouter />
+    </>
   )
 }
 

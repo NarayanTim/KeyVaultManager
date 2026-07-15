@@ -5,12 +5,13 @@ import type { User_T } from "@/@types/user.t";
 export interface UserContextType {
     user: User_T | null;
     isLoading: boolean;
-    refetch: () => void;
+    isSignedIn: boolean;
+    refetch?: () => void;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const useUser = () => {
+export const useUserAuth = () => {
     const ctx = useContext(UserContext);
     if (!ctx) {
         throw new Error("useUser must be used within a UserProvider");
