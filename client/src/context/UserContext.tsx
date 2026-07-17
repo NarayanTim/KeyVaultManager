@@ -4,9 +4,9 @@ import { UserContext } from "./helper/useUserAuth";
 
 
 export const UserProvider = ({ children }: { children: ReactNode }) => { 
-    const { data: user, isLoading, refetch, isSignedIn } = useUserProfile()
+    const { data: user, isLoading, refetch, isSignedIn, isLoaded } = useUserProfile()
     return (
-        <UserContext.Provider value={{ user: user ?? null, isLoading, refetch, isSignedIn }}>
+        <UserContext.Provider value={{ user: user ?? null, isLoading, refetch, isSignedIn, isLoaded }}>
             {children}
         </UserContext.Provider>
     )

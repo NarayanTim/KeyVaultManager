@@ -1,18 +1,23 @@
 import { Navigate } from "react-router-dom";
 import { useUserAuth } from "@/context/helper/useUserAuth";
+import { Skeleton } from "@/components/ui";
 
 const ProtectedRoute = ({children}: {children: React.ReactNode}) => {
-    const { user, isLoading, isSignedIn } = useUserAuth();
-    if (isLoading) {
-        return <div>Loading...</div>;
+    const { user, isLoading, isSignedIn, isLoaded } = useUserAuth();
+    if (!isLoaded || isLoading) {
+        // return <div>Loading...</div>;
+        return <Skeleton/>
     }
+    const isAuthenticated = isSignedIn && user;
+    console.log(`${JSON.stringify(user, null ,2)} and ${isSignedIn}`);
 
-    if (!isSignedIn || !user) {
-        console.log("Hello")
-        return <Navigate to="/" replace />;
-    }
+    // if (!isSignedIn || !user) {
+    //     console.log("Hello Fail With part")
+    //     console.log(`Part A ${!isSignedIn} --- Part B ${!user} `)
+    //     return <Navigate to="/" replace />;
+    // }
+    return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />;
 
-    return <>{children}</>;
 };
 
 export default ProtectedRoute;

@@ -7,6 +7,7 @@ export interface UserContextType {
     isLoading: boolean;
     isSignedIn: boolean;
     refetch?: () => void;
+    isLoaded:boolean;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);

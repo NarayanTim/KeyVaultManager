@@ -3,12 +3,19 @@ import Button from '../ui/Button';
 import ThemeToggle from '../ui/ThemeToggle';
 import { Link } from 'react-router-dom';
 import {Key} from 'lucide-react';
-import { SignInButton, SignUpButton, Show} from '@clerk/react'
+import { SignInButton, SignUpButton, Show, SignOutButton} from '@clerk/react'
+import { useNavigate } from "react-router-dom";
 
 
 
 
 const Header = () => {
+  const navigate = useNavigate();
+
+  const handleToDashboard = () => {
+    navigate("/dashboard")
+  }
+
     return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-secondary-950/80 backdrop-blur-lg border-b border-secondary-200 dark:border-secondary-800">
             
@@ -37,6 +44,14 @@ const Header = () => {
 
             <div className="flex items-center gap-4">
                 <ThemeToggle />
+                <Show when={"signed-in"}>
+
+                  <Button onClick={handleToDashboard} variant="primary" size="sm">Dashboard</Button>
+
+                <SignOutButton mode='modal'>
+                  <Button variant="danger" size="sm">Logout</Button>
+                </SignOutButton>
+                </Show>
               <Show when={"signed-out"}>
                   
               <SignInButton mode='modal'>

@@ -10,7 +10,6 @@ export const getUserProfile = async (apiWithAuth:ApiWithAuth):Promise<User_T> =>
             url: endpoint,
             method: "GET"
         })
-        console.log(JSON.stringify(response.user, null, 2) + " ---  --------- \n(Love)")
         return response.user
     } catch (error) {
         return handleApiError(error);
