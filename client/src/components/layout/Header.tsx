@@ -48,7 +48,7 @@ const Header = () => {
 
                   <Button onClick={handleToDashboard} variant="primary" size="sm">Dashboard</Button>
 
-                <SignOutButton mode='modal'>
+                <SignOutButton>
                   <Button variant="danger" size="sm">Logout</Button>
                 </SignOutButton>
                 </Show>

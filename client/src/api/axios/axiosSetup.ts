@@ -29,7 +29,10 @@ export interface ResFailMessage {
 }
 
 export type ApiResponse<T> = ResSuccessMessage<T> | ResFailMessage;
+
 export type ApiWithAuth = <T = unknown>(config: AxiosRequestConfig) => Promise<T>;
+
+
 export const useApi = () => {
   const { getToken } = useAuth();
 
