@@ -1,4 +1,4 @@
-export interface User_T{
+export interface User{
     id: string;
     clerkId: string;
     name: string | null;

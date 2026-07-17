@@ -1,9 +1,9 @@
 import { createContext, useContext } from "react";
-import type { User_T } from "@/@types/user.t";
+import type { User } from "@/@types/user.t";
 
 
 export interface UserContextType {
-    user: User_T | null;
+    user: User | null;
     isLoading: boolean;
     isSignedIn: boolean;
     refetch?: () => void;
