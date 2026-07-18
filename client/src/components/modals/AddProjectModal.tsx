@@ -16,11 +16,11 @@ interface AddProjectModalProps {
 
 const NAME_MAX_LENGTH = 80;
 
-const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
+const AddProjectModal = ({ isOpen, onClose, onSuccess }: AddProjectModalProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<ProjectInput>({
     name: '',
-    isActivate: true,
+    isActive: true,
   });
   const [fieldError, setFieldError] = useState<string | undefined>(undefined);
   const addProjectMutation = useAddProject();
