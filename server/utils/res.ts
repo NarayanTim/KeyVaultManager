@@ -66,6 +66,9 @@ export const errorMessage = ({res, error} : ErrorMessage)  => {
 
     return res.status(FAIL_CODE_NUMBER).json({
         success: false, 
+        error: {
+            message: FAIL_CODE_MESSAGE || (err.message || readString),
+        },
         message: FAIL_CODE_MESSAGE || (err.message || readString),
         
     });
