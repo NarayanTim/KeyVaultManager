@@ -12,7 +12,7 @@ export const addProject = async (apiWithAuth:ApiWithAuth, projectInput:ProjectIn
 
         return response.project
     } catch (error) {
-        handleApiError(error)
+        return handleApiError(error)
     }
 }
 
@@ -23,9 +23,9 @@ export const getAllProject = async (apiWithAuth:ApiWithAuth):Promise<Project[]> 
             url: endpoint,
             method: "GET",
         });
-
+        
         return response.project
     } catch (error) {
-        handleApiError(error)
+        return handleApiError(error)
     }
 }
