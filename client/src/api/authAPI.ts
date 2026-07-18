@@ -12,6 +12,7 @@ export const getUserProfile = async (apiWithAuth:ApiWithAuth):Promise<User> => {
 
         return response.user
     } catch (error) {
-        return handleApiError(error);
+        handleApiError(error);
+        throw error
     }
 }
