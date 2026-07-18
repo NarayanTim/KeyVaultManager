@@ -24,7 +24,7 @@ export const createProjectSchema = z.object({
     name: z.string().trim().min(5, "Project Name").max(200, "Project Name is too long").regex(
             /^(?=.*[a-zA-Z])[a-zA-Z0-9 _-]+$/,
             "Project name may only contain letters, numbers, spaces, hyphens, and underscores."
-        ),,
+        ),
     isActive: z.preprocess(
         (value) => {
             if (typeof value === "boolean") return value;
