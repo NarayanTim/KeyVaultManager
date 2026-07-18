@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from '../ui/index';
 import { Folder, X } from 'lucide-react';
 import BaseModal from './BaseModal';
-import Input from '../forms/input';
+// import Input from '../forms/input';
 
 
 
@@ -50,7 +50,8 @@ const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
         </div>
  
         {/* ── Field ── */}
-        <Input
+        <input name="name" value="Name" placeholder='Enter Name'/>
+        {/* <Input
           // ref={inputRef}
           label="Project name"
           placeholder="e.g. Website redesign"
@@ -60,7 +61,7 @@ const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
           // error={fieldError}
           maxLength={80}
           disabled={isPending}
-        />
+        /> */}
  
         {/* Character countdown — only near limit
         {name.length > 60 && !fieldError && (

@@ -36,13 +36,16 @@ const Dashboard = () => {
 
 
 
-  const projectsCount:number = 2;
+  // const projectsCount:number = 2;
   
-  const maxProjects = 10;
-  const { data: allProject, isLoading } = useGetProject();
-  console.log(allProject + " ------------- ")
+  const maxProjects:number = 10;
+  const { data: allProject = [], isLoading } = useGetProject();
+  console.log(allProject, "-------------");
   // const activeProjects = allProject.filter((p) => p.status === 'active').length;
-  const activeProjects = allProject
+  
+  const activeProjects = allProject?.length ?? 0;
+  const projectsCount = allProject?.length ?? 0;
+  console.log(projectsCount)
 
 
   return (

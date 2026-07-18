@@ -10,7 +10,7 @@ export const useAddProject = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (projectData:ProjectInput) => {
-            addProject(apiWithAuth, projectData)
+            return await addProject(apiWithAuth, projectData)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ["projects"]});
@@ -24,7 +24,6 @@ export const useGetProject = () => {
         queryKey: ["projects"],
         queryFn: () => getAllProject(apiWithAuth),
         staleTime: 1000 * 60 * 5, // 5 minutes
-        // enabled: isLoaded && isSignedIn,
         retry: 1,
     })
 }
