@@ -3,18 +3,11 @@ import { users } from "./Users.model.ts";
 
 export const projects = pgTable("projects",{
         id: uuid("id").primaryKey().defaultRandom(),
-
         userId: uuid("user_id").notNull().references(() => users.id, {onDelete: "cascade",}),
-
         name: text("name").notNull(),
-
         isActive: boolean("is_active").default(true).notNull(),
-
-        createdAt: timestamp("created_at", {withTimezone: true,}).defaultNow().notNull(),
-
-        updatedAt: timestamp("updated_at", {withTimezone: true,})
-            .defaultNow()
-            .notNull(),
+        createdAt: timestamp("created_at", {withTimezone: true}).defaultNow().notNull(),
+        updatedAt: timestamp("updated_at", {withTimezone: true}).defaultNow().notNull(),
     },
     (table) => ({
         uniqueUserProjectName: unique().on(

@@ -7,16 +7,11 @@ const router = Router();
 
 router.use(protectRoute)
 router.get("/all", getProjects)
-router.post("/add", addProject)
+router.post("/add-project", addProject)
 router.get("/:id", getProject);
 router.patch("/:id", updateProjectState);
 router.delete("/:id", deleteProject);
 router.post("/:id/key", recreateProjectKey);
-// router.get("/all", protectRoute, getProjects)
-// router.post("/add", protectRoute, addProject)
-// router.get("/:id", protectRoute, getProject);
-// router.patch("/:id",protectRoute, updateProjectState);
-// router.delete("/:id", protectRoute,deleteProject);
-// router.post("/:id/key",protectRoute, recreateProjectKey);
+
 
 export default router;

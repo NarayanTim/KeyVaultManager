@@ -5,7 +5,6 @@ import { handleApiError, type ApiWithAuth } from "./axios/axiosSetup";
 export const getUserProfile = async (apiWithAuth:ApiWithAuth):Promise<User> => {
     try {
         const endpoint: string = `/auth/profile`
-        // const response = await apiWithAuth<ApiResponse<{ user: User }>>({
         const response = await apiWithAuth<{ user: User }>({
             url: endpoint,
             method: "GET",

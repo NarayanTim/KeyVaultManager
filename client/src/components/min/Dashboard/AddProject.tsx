@@ -11,7 +11,7 @@ const AddProject = () => {
       <>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <h2 className="text-xl font-semibold text-secondary-900 dark:text-white">Projects</h2>
-          <Button onClick={() => setCreateModalOpen(true)} disabled={!createModalOpen}>
+          <Button onClick={() => setCreateModalOpen(true)} disabled={createModalOpen}>
             <Plus className="w-4 h-4" />
             New Project
           </Button>

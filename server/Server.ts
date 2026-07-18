@@ -55,7 +55,7 @@ app.get("/health", (req, res) => {
 
 
 app.use("/api/auth", userRoute)
-app.use("/api/projects", projectRoute)
+app.use("/api/project", projectRoute)
 // app.use("/api/secret", secretRoute)
 // app.use("/api/membership", membershipRoute)
 app.use(errorHandler)

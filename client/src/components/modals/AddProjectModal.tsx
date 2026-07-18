@@ -1,82 +1,33 @@
-import React, { useRef, useState } from 'react'
+import React from 'react'
 import { Button } from '../ui/index';
 import { Folder, X } from 'lucide-react';
 import BaseModal from './BaseModal';
-// import { validate } from '@/lib/helper';
 import Input from '../forms/input';
 
 
 
 interface AddProjectModalProps {
   isOpen: boolean;
-    onClose: () => void;
-  /**
-   * Optional: called after the project is successfully created.
-   * Useful for navigating to the new project, showing a toast, etc.
-   */
+  onClose: () => void;
   onSuccess?: (projectId: string) => void;
+  onNavigate?: () => void;
 
 }
- 
 
-const AddProjectModal = ({ isOpen, onClose, onSuccess }: AddProjectModalProps) => {
-  const [name, setName] = useState('');
-  const [fieldError, setFieldError] = useState('');
-    const inputRef = useRef<HTMLInputElement>(null);
-    const isPending = false
-    const isError = false
-    // const error = "Fail"
-    // const reset = false
- 
-//   const { mutate: createProject, isPending, isError, error, reset } = null
-//   const { mutate: createProject, isPending, isError, error, reset } = useCreateProject({
-//     onSuccess: (project) => {
-//       onClose();
-//       onSuccess?.(project.id);
-//     },
-    //   });
-    
 
- 
-  // Reset form + mutation state each time the modal opens
-//   useEffect(() => {
-//     if (isOpen) {
-//     //   setName('');
-//         //   setFieldError('');
-//         onSuccess()?
-//     //   reset(); // clear any previous React Query error
-//     //   setTimeout(() => inputRef.current?.focus(), 0); // wait for GSAP open
-//     }
-//   }, [isOpen, reset]);
- 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const _T = e;
-    console.log(_T)
-    setName("_T");
-    setFieldError("Fail")
-    //   if (fieldError) setFieldError(validate(e.target.value));
-      onSuccess("1")
-  };
- 
-  const handleSubmit = () => {
-    //   const err = validate(name);
-    
-    // if (err) {
-    //   setFieldError(err);
-    //   inputRef.current?.focus();
-    //   return;
-    // }
-    // createProject({ name: name.trim() });
-  };
- 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handleSubmit();
-  };
- 
+const AddProjectModal = ({ isOpen, onClose }: AddProjectModalProps) => {
+  const isPending = false;
+  
+  // const handleKeyDown = (e: React.KeyboardEvent) => {
+  //   if (e.key === 'Enter') {
+  //     handleSubmit();
+  //   }
+  // };
+
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} size="sm" showClose={false}>
       <div className="space-y-5">
- 
+
         {/* ── Header ── */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -100,18 +51,18 @@ const AddProjectModal = ({ isOpen, onClose, onSuccess }: AddProjectModalProps) =
  
         {/* ── Field ── */}
         <Input
-          ref={inputRef}
+          // ref={inputRef}
           label="Project name"
           placeholder="e.g. Website redesign"
           value={name}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          error={fieldError}
+          // onChange={handleChange}
+          // onKeyDown={handleKeyDown}
+          // error={fieldError}
           maxLength={80}
           disabled={isPending}
         />
  
-        {/* Character countdown — only near limit */}
+        {/* Character countdown — only near limit
         {name.length > 60 && !fieldError && (
           <p className="text-xs text-secondary-400 dark:text-secondary-500 text-right -mt-3">
                       {80 - name.length} characters remaining
@@ -119,18 +70,19 @@ const AddProjectModal = ({ isOpen, onClose, onSuccess }: AddProjectModalProps) =
         )}
  
         {/* ── Server error banner ── */}
-        {isError && (
+        {/* {isError && (
           <p className="text-sm text-error-600 dark:text-error-400 bg-error-50 dark:bg-error-900/20 px-3 py-2 rounded-lg">
             {'Something went wrong. Please try again.'}
           </p>
-        )}
+        )}  */}
  
         {/* ── Actions ── */}
         <div className="flex gap-3 justify-end pt-1">
           <Button variant="secondary" onClick={onClose} disabled={isPending}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleSubmit} isLoading={isPending}>
+          {/* <Button variant="primary" onClick={handleSubmit} isLoading={isPending}> */}
+          <Button variant="primary"  isLoading={isPending}>
             Create project
           </Button>
         </div>

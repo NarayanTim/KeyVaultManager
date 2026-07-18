@@ -5,7 +5,7 @@ import { addNewProject, deleteUserProject, generateNewProjectKey, getUserProject
 import { createProjectSchema } from "../forms/forms.ts"
 
 
-const PG_UNIQUE_VIOLATION = "23505";
+
 
 export const getProjects = async (req:AuthRequest, res:Response, next:NextFunction) => {
     try {
@@ -84,14 +84,58 @@ export const getProject = async (req:AuthRequest, res:Response, next:NextFunctio
 }
 
 
-export const addProject = async (req:AuthRequest, res:Response, next:NextFunction) => { 
+// export const addProject = async (req:AuthRequest, res:Response, next:NextFunction) => { 
+//     try {
+//         const userId = req.userID
+//         if (!userId) {
+//             return resFail({res, code:HTTP_STATUS.UNAUTHORIZED, message:"User not found"})
+//         }
+        
+//         // ── Validate body ─────────────────────────────────────────────────────
+//         const result = createProjectSchema.safeParse(req.body);
+//         if (!result.success) {
+//             return resFail({
+//                 res,
+//                 code: HTTP_STATUS.BAD_REQUEST,
+//                 message: resZodIssue(result.error.issues),
+//             });
+//         }
+//         const { name, isActive } = result.data;
+//         try {
+//             const addedProject = await addNewProject({ name, userId, isActive })
+//             return resSuccess({
+//                 res,
+//                 code: HTTP_STATUS.CREATED,
+//                 data: { project: { id: addedProject.id, name: addedProject.name } },
+//                 message: "Project added",
+//             });    
+//         } catch (error) {
+//             if (err?.code === PG_UNIQUE_VIOLATION) {
+//                 return resFail({ res, code: HTTP_STATUS.CONFLICT, message: "You already have a project with this name" });
+//             }
+//             throw err;
+//         }
+
+//         return resSuccess({
+//             res,
+//             code: HTTP_STATUS.CREATED,
+//             data: { project: { id: addedProject.id, name: addedProject.name } },
+//             message: "Project added",
+//         });
+        
+//     } catch (error) {
+//         next(error)
+//     }
+// }
+
+
+
+export const addProject = async (req:AuthRequest, res:Response, next:NextFunction) => {
     try {
-        const userId = req.userID
+        const userId = req.userID;
         if (!userId) {
             return resFail({res, code:HTTP_STATUS.UNAUTHORIZED, message:"User not found"})
         }
-        
-        // ── Validate body ─────────────────────────────────────────────────────
         const result = createProjectSchema.safeParse(req.body);
         if (!result.success) {
             return resFail({
@@ -100,40 +144,37 @@ export const addProject = async (req:AuthRequest, res:Response, next:NextFunctio
                 message: resZodIssue(result.error.issues),
             });
         }
-        const { name, isActive } = result.data;
-        // const addedProject = await addNewProject({name, userId, isActive})
-        // if (!addedProject) {
-        //     return resFail({ res, code: HTTP_STATUS.CONFLICT, message: "Failed to add project" });
-        // }
-
-        try {
-            const addedProject = await addNewProject({ name, userId, isActive })
-            return resSuccess({
-                res,
-                code: HTTP_STATUS.CREATED,
-                data: { project: { id: addedProject.id, name: addedProject.name } },
-                message: "Project added",
-            });    
-        } catch (error) {
-            if (err?.code === PG_UNIQUE_VIOLATION) {
-                return resFail({ res, code: HTTP_STATUS.CONFLICT, message: "You already have a project with this name" });
-            }
-            throw err;
-        }
-
-
-
-        return resSuccess({
-            res,
-            code: HTTP_STATUS.CREATED,
-            data: { project: { id: addedProject.id, name: addedProject.name } },
+        const project = await addNewProject({ ...result.data, userId })
+        return resSuccess({res,code: HTTP_STATUS.CREATED,
+            data: {
+                project:{
+                    id: project.id,
+                    name: project.name,
+                    key: project.key, // only shown once
+                },
+            },
             message: "Project added",
         });
         
     } catch (error) {
+        if (error instanceof ProjectNameExistsError) {
+            return resFail({res, code: HTTP_STATUS.CONFLICT, message: "You already have a project with this name",
+            });
+        }
         next(error)
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 export const recreateProjectKey = async (req:AuthRequest, res:Response, next:NextFunction) => {
     try {

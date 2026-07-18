@@ -4,28 +4,16 @@ import { useAuth } from "@clerk/react";
 import {  useQuery } from "@tanstack/react-query";
 
 
-
-
-// export const useUserProfile  = () => {
-//     const { apiWithAuth } = useApi()
-//     const {isLoaded, isSignedIn} = useAuth()
-//     return useQuery({
-//         queryKey: ["user_profile"],
-//         queryFn: () => getUserProfile(apiWithAuth),
-//         enabled: isLoaded && isSignedIn,
-//         retry: false,
-//     })
-// }
-
 export const useUserProfile = () => {
     const { apiWithAuth } = useApi();
-    const { isLoaded, isSignedIn } = useAuth();
+    const { isLoaded, isSignedIn, userId } = useAuth();
 
     const query = useQuery({
-        queryKey: ["user_profile"],
+        queryKey: ["user_profile", userId],
         queryFn: () => getUserProfile(apiWithAuth),
+        staleTime: 1000 * 60 * 5, // 5 minutes
         enabled: isLoaded && isSignedIn,
-        retry: false,
+        retry: 1,
     });
 
     return {

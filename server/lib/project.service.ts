@@ -4,6 +4,8 @@ import { projects } from "../models/Project.model.ts";
 import { projectKeys } from "../models/ProjectKey.model.ts";
 import { createAPIKey, hashAPIKey } from "../utils/security.ts";
 
+
+const PG_UNIQUE_VIOLATION = "23505";
 type UserId = string;
 type ProjectId = string;
 
@@ -36,9 +38,6 @@ export const getUserProjects = async (userId: UserId, filterKey?: boolean): Prom
             id: true,
             createdAt: true,
         },
-        // filterKey was previously accepted but unused — wired in here as
-        // "only return active projects when true". Adjust if you meant
-        // something else (e.g. only projects that HAVE a key row).
         where: filterKey ? and(eq(projects.userId, userId), eq(projects.isActive, true)) : eq(projects.userId, userId),
         orderBy: (projects, { desc }) => [desc(projects.createdAt)],
     });
@@ -53,34 +52,85 @@ export const getUserProject = async (userId:UserId, projectId:ProjectId):Promise
     })
 }
 
-export const addNewProject = async ({name, userId, isActive}:NewProjectInput) : Promise<NewProjectResult> => {
+
+export const addNewProject = async ({name,userId,isActive}: NewProjectInput): Promise<NewProjectResult> => {
+    try {
+        return await db.transaction(async (tx) => {
+            const [newProject] = await tx
+                .insert(projects)
+                .values({
+                    name,
+                    userId,
+                    isActive: isActive ?? true,
+                })
+                .returning();
+
+            if (!newProject) {
+                throw new Error("Failed to create project");
+            }
+
+            const apiKey = await createAPIKey();
+            const keyHash = await hashAPIKey(apiKey);
+
+            const [projectKey] = await tx.insert(projectKeys).values({projectId: newProject.id,keyHash}).returning();
+
+            if (!projectKey) {
+                throw new Error("Failed to create project key");
+            }
+
+            return {
+                id: newProject.id,
+                name: newProject.name,
+                key: apiKey,
+                hashKey: projectKey.keyHash,
+            };
+        });
+    } catch (error: any) {
+        if (error?.code === PG_UNIQUE_VIOLATION) {
+            throw new Error("ProjectNameExistsError");
+        }
+        throw error;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+// export const addNewProject = async ({name, userId, isActive}:NewProjectInput) : Promise<NewProjectResult> =>{
     
-    const [newProject] = await db.insert(projects).values({
-        name,
-        userId,
-        isActive: isActive ?? true,
-    }).returning();
+//     const [newProject] = await db.insert(projects).values({
+//         name,
+//         userId,
+//         isActive: isActive ?? true,
+//     }).returning();
 
-    if (!newProject) {
-        throw new Error("Failed to create project");
-    }
+//     if (!newProject) {
+//         throw new Error("Failed to create project");
+//     }
 
 
-    const apiKey = await createAPIKey()
-    const keyHash  = await hashAPIKey(apiKey)
-    const [projectKey] = await db.insert(projectKeys).values({
-        projectId:newProject?.id,
-        keyHash,
-    }).returning()
+//     const apiKey = await createAPIKey()
+//     const keyHash  = await hashAPIKey(apiKey)
+//     const [projectKey] = await db.insert(projectKeys).values({
+//         projectId:newProject?.id,
+//         keyHash,
+//     }).returning()
 
-    return {
-        id:newProject.id,
-        name:newProject.name,
-        key:apiKey,
-        hashKey:projectKey?.keyHash
-    }
-
-}
+//     return {
+//         id:newProject.id,
+//         name:newProject.name,
+//         key:apiKey,
+//         hashKey:projectKey?.keyHash
+//     }
+// }
 
 
 // Create new project key
