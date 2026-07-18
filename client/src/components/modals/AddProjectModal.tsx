@@ -39,7 +39,7 @@ const AddProjectModal = ({ isOpen, onClose, onSuccess }: AddProjectModalProps) =
     if (isPending) {
       return;
     }
-    setFormData({ name: '', isActivate: true });
+    setFormData({ name: '', isActive: true });
     setFieldError(undefined);
     addProjectMutation.reset();
     onClose();
