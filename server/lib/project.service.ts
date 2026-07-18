@@ -5,6 +5,14 @@ import { projectKeys } from "../models/ProjectKey.model.ts";
 import { createAPIKey, hashAPIKey } from "../utils/security.ts";
 
 
+export class ProjectNameExistsError extends Error {
+    constructor() {
+        super("Project name already exists");
+        this.name = "ProjectNameExistsError";
+    }
+}
+
+
 const PG_UNIQUE_VIOLATION = "23505";
 type UserId = string;
 type ProjectId = string;
@@ -87,7 +95,8 @@ export const addNewProject = async ({name,userId,isActive}: NewProjectInput): Pr
         });
     } catch (error: any) {
         if (error?.code === PG_UNIQUE_VIOLATION) {
-            throw new Error("ProjectNameExistsError");
+            // throw new Error("ProjectNameExistsError");
+            throw new ProjectNameExistsError();
         }
         throw error;
     }
