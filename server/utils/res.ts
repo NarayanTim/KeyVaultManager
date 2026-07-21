@@ -103,18 +103,31 @@ export const resSuccess = <T>({res, code, data, message="Process Completed"}: Re
 //     return fieldErrors
 // }
 
-export const resZodIssue = (
-    zodIssues: ZodIssue[]
-): Record<string, string> => {
-    const fieldErrors: Record<string, string> = {};
+// export const resZodIssue = (
+//     zodIssues: ZodIssue[]
+// ): Record<string, string> => {
+//     const fieldErrors: Record<string, string> = {};
 
-    zodIssues.forEach((err) => {
+//     zodIssues.forEach((err) => {
+//         const field = err.path[0]?.toString() || "general";
+
+//         if (!fieldErrors[field]) {
+//             fieldErrors[field] = err.message;
+//         }
+//     });
+
+//     return fieldErrors;
+// };
+
+
+export const resZodIssue = (zodIssues: ZodIssue[]): string => {
+    const fieldErrors = new Map<string, string>();
+    for (const err of zodIssues) {
         const field = err.path[0]?.toString() || "general";
 
-        if (!fieldErrors[field]) {
-            fieldErrors[field] = err.message;
+        if (!fieldErrors.has(field)) {
+            fieldErrors.set(field, err.message);
         }
-    });
-
-    return fieldErrors;
+    }
+    return Array.from(fieldErrors.entries()).map(([field, message]) => `[${field}]: ${message}`).join("\n");
 };

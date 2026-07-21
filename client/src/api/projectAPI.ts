@@ -1,5 +1,4 @@
 import type { ProjectInput, ProjectWithKey, Project } from "@/@types/project.t";
-// import { handleApiError, type ApiWithAuth } from "./axios/axiosSetup";
 import { type ApiWithAuth } from "./axios/axiosSetup";
 
 export const addProject = async (apiWithAuth:ApiWithAuth, projectInput:ProjectInput):Promise<ProjectWithKey> => {
