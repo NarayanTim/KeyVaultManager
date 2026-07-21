@@ -43,7 +43,6 @@ export const getLatestProject = async (apiWithAuth:ApiWithAuth): Promise<Project
 }
 
 
-
 export const updateProjectState = async (apiWithAuth: ApiWithAuth, projectInput:UpdateProjectStateInput, id:string|number): Promise<UpdateProjectStats> => {
     const endpoint = `/project/update/${id}`
     const response = await apiWithAuth<{ project: UpdateProjectStats }>({
@@ -53,3 +52,4 @@ export const updateProjectState = async (apiWithAuth: ApiWithAuth, projectInput:
     })
     return response.project
 }
+

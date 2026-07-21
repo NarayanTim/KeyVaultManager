@@ -57,7 +57,6 @@ const DataTable = <T extends object>({
   loading = false,
   className,
 }: DataTableProps<T>) => {
-  console.log("Data -----------------: ", data)
   const totalPages = totalItems ? Math.ceil(totalItems / pageSize) : Math.ceil(data.length / pageSize);
 
   const paginatedData = useMemo(() => {

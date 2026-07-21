@@ -4,6 +4,7 @@ import {  useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Project, ProjectInput, ProjectWithKey, UpdateProjectStateInput } from './../@types/project.t';
 
 
+
 export const useAddProject = () => {
     const { apiWithAuth } = useApi();
     const queryClient = useQueryClient();
@@ -20,7 +21,7 @@ export const useAddProject = () => {
 export const useUpdateProjectState = (id:string|number) => {
     const { apiWithAuth } = useApi();
     const queryClient = useQueryClient();
-    return useMutation<Project, Error, UpdateProjectStateInput>({
+    return useMutation<UpdateProjectStateInput, Error, UpdateProjectStateInput>({
         mutationFn: async (projectData:UpdateProjectStateInput) => {
             return await updateProjectState(apiWithAuth, projectData, id);
         },
@@ -47,10 +48,11 @@ export const useGetLatestProjects = () => {
     return useQuery<Project[]>({
         queryKey: ["projects"],
         queryFn: () => getLatestProject(apiWithAuth),
-        staleTime: 1000 * 60 * 5, // 5 minutes
+        staleTime: 1000 * 60 * 5,
         retry: 1,
     })
 }
+
 
 
 export const useGetProject = (id:string|number) => {

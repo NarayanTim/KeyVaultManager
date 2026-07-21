@@ -53,12 +53,20 @@ const Dashboard = () => {
                 icon={FolderOpen}
                 title="No Projects Yet"
                 description="Create your first project to get started."
-                action={{ label: 'Create Project', onClick: () => setCreateModalOpen(true) }}
               />
             </Card>
           ): (
               
-            <DataTable searchPlaceholder='Search projects...' onRowClick={(p) => navigate(`/projects/${p.id}`)} data={!isLoading ? allProject : []} keyExtractor={(p)=>p.id} columns={columns} searchable onSearchChange={setSearchQuery} searchValue={searchQuery} />
+              <DataTable
+                searchable
+                searchPlaceholder='Search projects...'
+                onRowClick={(p) => navigate(`/projects/${p.id}`)}
+                data={!isLoading ? allProject : []}
+                keyExtractor={(p) => p.id}
+                columns={columns}
+                onSearchChange={setSearchQuery}
+                searchValue={searchQuery}
+              />
           )
           }
       </div>
