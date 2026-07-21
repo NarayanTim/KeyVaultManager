@@ -17,7 +17,7 @@ const getColumns = ({navigate, setSelectedProject, setDeleteModalOpen}: ColumnPr
     key: "status",
     header: "Status",
     render: (item: Project) => (
-      <Badge variant={item.isActive ? "success" : "default"}>
+      <Badge variant={item.isActive ? "success" : "error"}>
         {item.isActive ? "Active" : "Inactive"}
       </Badge>
     ),
