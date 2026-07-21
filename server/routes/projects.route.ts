@@ -8,7 +8,7 @@ const router = Router();
 router.use(protectRoute)
 router.get("/all", getProjects)
 router.post("/add-project", addProject)
-router.post("/latest", getLatestProjects)
+router.get("/latest", getLatestProjects)
 router.get("/get/:id", getProject);
 router.patch("/update/:id", updateProjectState);
 
