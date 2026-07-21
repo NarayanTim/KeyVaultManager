@@ -8,7 +8,7 @@ import { EmptyState } from '@/components/feedback';
 import { FolderOpen } from 'lucide-react';
 import { Card } from '@/components/ui';
 import { useNavigate } from 'react-router-dom';
-
+import { Project } from './../@types/project.t';
 
 
 const Dashboard = () => {

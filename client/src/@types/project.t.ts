@@ -16,6 +16,10 @@ export interface ProjectInput{
     isActive: boolean;
 }
 
-export type UpdateProjectStateInput = Pick<Project, "isActive">
+export interface UpdateProjectStateInput{
+    isActive: boolean;
+} 
+
+// export type UpdateProjectStateInput = Pick<Project, "isActive">
 
 export type UpdateProjectStats = Pick<Project, "name" | "isActive">;
