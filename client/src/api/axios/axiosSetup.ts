@@ -142,17 +142,12 @@ export const useApi = () => {
         if (axios.isAxiosError(error)) {
           console.log("STATUS:", error.response?.status);
           console.log("DATA:", error.response?.data);
-          // const responseData = error.response?.data.error?.message | error.response?.data.message;
           const responseData = error.response?.data.error?.message;
           console.log("DATA 2 :", responseData);
           
           const mgs = responseData;
-          console.log("DATA 2 --- 4344:", mgs);
           const message = getErrorMessage(mgs)
-          
-          console.log("DATA 2 ---:", message);
           throw new Error(message, { cause: error });
-
         }
 
         throw error;

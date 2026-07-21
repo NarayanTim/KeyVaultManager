@@ -1,6 +1,9 @@
 
-import { drizzle } from 'drizzle-orm/neon-http';
-import { neon } from '@neondatabase/serverless';
+// import { drizzle } from 'drizzle-orm/neon-http';
+// import { neon } from '@neondatabase/serverless';
+
+import { drizzle } from "drizzle-orm/neon-serverless";
+import { Pool } from "@neondatabase/serverless";
 import { users, memberships, secrets, projectKeys, projects,  planEnum, subscriptionStatusEnum} from '../models/index.ts';
 import env from './env.ts';
 
@@ -11,8 +14,12 @@ if (!env.DATABASE_URL) {
 }
 
 
-const sql = neon(env.DATABASE_URL);
+const pool = new Pool({
+    connectionString:env.DATABASE_URL,
+})
 
-const db = drizzle(sql, { schema: { users, memberships, secrets, projectKeys, projects,  planEnum, subscriptionStatusEnum } });
+// const sql = neon(env.DATABASE_URL);
+
+const db = drizzle(pool, { schema: { users, memberships, secrets, projectKeys, projects,  planEnum, subscriptionStatusEnum } });
 
 export default db;

@@ -95,7 +95,6 @@ export const addNewProject = async ({name,userId,isActive}: NewProjectInput): Pr
         });
     } catch (error: any) {
         if (error?.code === PG_UNIQUE_VIOLATION) {
-            // throw new Error("ProjectNameExistsError");
             throw new ProjectNameExistsError();
         }
         throw error;
