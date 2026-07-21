@@ -3,6 +3,7 @@ import type { Response, Request, NextFunction } from "express"
 import { errorMessage, HTTP_STATUS, resFail, resSuccess, resZodIssue } from "../utils/res.ts"
 import { addNewProject, deleteUserProject, generateNewProjectKey, getUserProject, getUserProjects, updateState } from "../lib/project.service.ts"
 import { createProjectSchema } from "../forms/forms.ts"
+import { ProjectNameExistsError } from './../lib/project.service';
 
 
 
