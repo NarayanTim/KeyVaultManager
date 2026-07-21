@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import Input from './../forms/input';
 import Button from './Button';
+import SearchInput from '../min/project/SearchInput';
 
 
 interface Column<T> {
@@ -41,7 +41,7 @@ const DataTable = <T extends object>({
   columns,
   keyExtractor,
   searchable = false,
-  searchPlaceholder = 'Search...',
+  searchPlaceholder = "Search projects...",
   searchValue = '',
   onSearchChange,
   sortColumn,
@@ -57,6 +57,7 @@ const DataTable = <T extends object>({
   loading = false,
   className,
 }: DataTableProps<T>) => {
+  console.log("Data -----------------: ", data)
   const totalPages = totalItems ? Math.ceil(totalItems / pageSize) : Math.ceil(data.length / pageSize);
 
   const paginatedData = useMemo(() => {
@@ -75,13 +76,7 @@ const DataTable = <T extends object>({
     <div className={cn('space-y-4', className)}>
       {searchable && (
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary-400" />
-          <Input
-            value={searchValue}
-            onChange={(e) => onSearchChange?.(e.target.value)}
-            placeholder={searchPlaceholder}
-            className="pl-9"
-          />
+          <SearchInput searchPlaceholder={searchPlaceholder} size={totalItems} searchQuery={ searchValue } setSearchQuery={onSearchChange} />
         </div>
       )}
 

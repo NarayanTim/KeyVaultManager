@@ -8,10 +8,14 @@ export interface Project {
 }
 
 export interface ProjectWithKey extends Partial<Project> {
-    key?: string;
+    key: string;
 }
 
 export interface ProjectInput{
     name: string;
     isActive: boolean;
 }
+
+export type UpdateProjectStateInput = Pick<Project, "isActive">
+
+export type UpdateProjectStats = Pick<Project, "name" | "isActive">;

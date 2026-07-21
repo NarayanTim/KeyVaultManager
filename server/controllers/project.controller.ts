@@ -1,7 +1,7 @@
 import type { AuthRequest } from "../middlewares/auth.ts"
 import type { Response, Request, NextFunction } from "express"
 import { errorMessage, HTTP_STATUS, resFail, resSuccess, resZodIssue } from "../utils/res.ts"
-import { addNewProject, deleteUserProject, generateNewProjectKey, getUserProject, getUserProjects, updateState } from "../lib/project.service.ts"
+import { addNewProject, deleteUserProject, generateNewProjectKey, getLatestNewProject, getUserProject, getUserProjects, updateState } from "../lib/project.service.ts"
 import { createProjectSchema } from "../forms/forms.ts"
 import { ProjectNameExistsError } from './../lib/project.service';
 
@@ -78,6 +78,22 @@ export const getProject = async (req:AuthRequest, res:Response, next:NextFunctio
 
         return resSuccess({ res, code: HTTP_STATUS.OK, data: { project }, message: "Project found" });
 
+        
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+
+export const getLatestProjects  = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.userID
+        if (!userId) {
+            return resFail({res, code:HTTP_STATUS.UNAUTHORIZED, message:"User not found"})
+        }
+        const allProjects = await getLatestNewProject(userId);
+        return resSuccess({res, code:HTTP_STATUS.OK, data:{projects: allProjects}, message:"Received all new projects"})
         
     } catch (error) {
         next(error)

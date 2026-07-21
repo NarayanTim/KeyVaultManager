@@ -61,6 +61,21 @@ export const getUserProject = async (userId:UserId, projectId:ProjectId):Promise
 }
 
 
+
+export const getLatestNewProject = async (userId: UserId): Promise<ProjectListItem[]> => {
+    return await db.query.projects.findMany({
+        columns: {
+            name: true,
+            isActive: true,
+            id: true,
+            createdAt: true,
+        },
+        where: eq(projects.userId, userId),
+        orderBy: (projects, { desc }) => [desc(projects.createdAt)],
+        limit: 10,
+    });
+}
+
 export const addNewProject = async ({name,userId,isActive}: NewProjectInput): Promise<NewProjectResult> => {
     try {
         return await db.transaction(async (tx) => {
