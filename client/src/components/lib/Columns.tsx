@@ -6,9 +6,10 @@ interface ColumnProps {
   navigate: NavigateFunction;
   setSelectedProject: React.Dispatch<React.SetStateAction<Project | null>>;
   setDeleteModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onUpdateProjectState?: () => void;
+  onUpdateProjectState?: (project:Project) => void;
 }
 
+// const getColumns = ({navigate, setSelectedProject, setDeleteModalOpen, onUpdateProjectState, onDeleteProject}: ColumnProps) => [
 const getColumns = ({navigate, setSelectedProject, setDeleteModalOpen, onUpdateProjectState}: ColumnProps) => [
   {
     key: "name",
@@ -66,8 +67,7 @@ const getColumns = ({navigate, setSelectedProject, setDeleteModalOpen, onUpdateP
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            setSelectedProject(item);
-            onUpdateProjectState?.()
+            onUpdateProjectState?.(item)
           }}
           className={`
             relative inline-flex h-6 w-11 items-center rounded-full transition-colors
@@ -93,6 +93,7 @@ const getColumns = ({navigate, setSelectedProject, setDeleteModalOpen, onUpdateP
           onClick={(e) => {
             e.stopPropagation();
             setSelectedProject(item);
+            // onDeleteProject?.(item.id)
             setDeleteModalOpen(true);
           }}
         >

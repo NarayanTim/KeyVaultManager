@@ -28,25 +28,25 @@ const ProjectPage = () => {
 
     
     
-    const onUpdateProjectState = () => {
-        if (!selectedProject) return;
-        
+    const onUpdateProjectState = (project: Project) => {
+        if (!project) return;
         updateProjectState.mutate({
-            id: selectedProject?.id,
+            id: project?.id,
             projectData: {
-                isActive: !selectedProject?.isActive
+                isActive: !project?.isActive
             }
         })
+        setSelectedProject(null)
     }
-    const columns = getColumns({ navigate, setSelectedProject, setDeleteModalOpen, onUpdateProjectState });
-
+    
     const onDeleteCalled = () => {
         if (selectedProject) {
             deleteMutation.mutate(selectedProject?.id)
             setDeleteModalOpen(false)
         }
     }
-
+    
+    const columns = getColumns({ navigate, setSelectedProject, setDeleteModalOpen, onUpdateProjectState });
     // console.log(searchQuery, currentPage, setCurrentPage, setSearchQuery, deleteModalOpen)
     return (    
         <DashboardLayout>
