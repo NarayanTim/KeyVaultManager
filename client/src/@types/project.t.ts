@@ -18,5 +18,11 @@ export interface ProjectInput{
 
 export type UpdateProjectStateInput = Pick<Project, "isActive">
 
+export type UpdateProjectStateVariables = {
+    id: string;
+    projectData: UpdateProjectStateInput;
+};
+
+
 export type UpdateProjectStats = Pick<Project, "name" | "isActive">;
 export type ProjectDelete = Pick<Project, "name">;

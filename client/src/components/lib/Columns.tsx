@@ -6,9 +6,10 @@ interface ColumnProps {
   navigate: NavigateFunction;
   setSelectedProject: React.Dispatch<React.SetStateAction<Project | null>>;
   setDeleteModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onUpdateProjectState?: () => void;
 }
 
-const getColumns = ({navigate, setSelectedProject, setDeleteModalOpen}: ColumnProps) => [
+const getColumns = ({navigate, setSelectedProject, setDeleteModalOpen, onUpdateProjectState}: ColumnProps) => [
   {
     key: "name",
     header: "Name",
@@ -49,7 +50,7 @@ const getColumns = ({navigate, setSelectedProject, setDeleteModalOpen}: ColumnPr
           View
         </Button>
 
-        <Button
+        {/* <Button
           variant="ghost"
           size="sm"
           className="text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
@@ -58,8 +59,32 @@ const getColumns = ({navigate, setSelectedProject, setDeleteModalOpen}: ColumnPr
             setSelectedProject(item);
           }}
         >
-          updateState
+          {item.isActive ? "🟢 Active" : "⚫ Inactive"}
+        </Button> */}
+
+        <Button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedProject(item);
+            onUpdateProjectState?.()
+          }}
+          className={`
+            relative inline-flex h-6 w-11 items-center rounded-full transition-colors
+            ${item.isActive
+              ? "bg-green-500"
+              : "bg-secondary-300 dark:bg-secondary-700"}
+          `}
+        >
+          <span
+            className={`
+              inline-block h-4 w-4 transform rounded-full bg-white transition-transform
+              ${item.isActive ? "translate-x-6" : "translate-x-1"}
+            `}
+          />
         </Button>
+
+
 
         <Button
           variant="ghost"

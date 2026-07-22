@@ -1,7 +1,7 @@
 import { useApi } from "@/api/axios/axiosSetup";
 import { addProject, deleteProject, getAllProject, getLatestProject, getProject, updateProjectState } from "@/api/projectAPI";
 import {  useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Project, ProjectDelete, ProjectInput, ProjectWithKey, UpdateProjectStateInput } from './../@types/project.t';
+import type { Project, ProjectDelete, ProjectInput, ProjectWithKey, UpdateProjectStateInput, UpdateProjectStateVariables } from './../@types/project.t';
 
 type InputID = string;
 
@@ -19,11 +19,11 @@ export const useAddProject = () => {
     })
 }
 
-export const useUpdateProjectState = (id:InputID) => {
+export const useUpdateProjectState = () => {
     const { apiWithAuth } = useApi();
     const queryClient = useQueryClient();
-    return useMutation<UpdateProjectStateInput, Error, UpdateProjectStateInput>({
-        mutationFn: async (projectData:UpdateProjectStateInput) => {
+    return useMutation<UpdateProjectStateInput, Error, UpdateProjectStateVariables>({
+        mutationFn: async ({id, projectData}) => {
             return await updateProjectState(apiWithAuth, projectData, id);
         },
         onSuccess: () => {

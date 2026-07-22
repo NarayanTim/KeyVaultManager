@@ -58,7 +58,7 @@ export const updateProjectState = async (apiWithAuth: ApiWithAuth, projectInputP
 
 
 export const deleteProject = async (apiWithAuth: ApiWithAuth, id: string | number):Promise<ProjectDelete>=> {
-    const endpoint = `/project//delete/${id}`
+    const endpoint = `/project/delete/${id}`
     const response = await apiWithAuth<{ name: ProjectDelete }>({
         url: endpoint,
         method: "DELETE",
