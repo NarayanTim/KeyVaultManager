@@ -7,10 +7,11 @@ import getColumns  from '@/components/lib/Columns';
 import { useDeleteProject, useGetProjects } from '@/hooks/projectHook';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmModal } from '@/components/modals';
+import { Project } from '@/@types/project.t';
 
 
 
-const Project = () => {
+const ProjectPage = () => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1)
 
@@ -20,7 +21,7 @@ const Project = () => {
     const navigate = useNavigate();
     const [selectedProject, setSelectedProject] =useState<Project | null>(null);
     
-    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
     const columns = getColumns({ navigate, setSelectedProject, setDeleteModalOpen });
     
@@ -65,6 +66,7 @@ const Project = () => {
                 searchValue={searchQuery}
                 paginated
                 pageSize={5}
+                currentPage={currentPage}
                 onPageChange={setCurrentPage}
             />
 
@@ -72,7 +74,7 @@ const Project = () => {
             <ConfirmModal
                 isOpen={deleteModalOpen}
                 onClose={() => setDeleteModalOpen(false)}
-                onConfirm={()=> onDeleteCalled()}
+                onConfirm={onDeleteCalled}
                 title="Delete Project"
                 description={
                     <>
@@ -93,12 +95,9 @@ const Project = () => {
                 loading={deleteMutation.isPending}
             
             />
-            {
-                console.log(selectedProject, " Is Given")
-            }
 
         </DashboardLayout>
     )
 }
 
-export default Project
+export default ProjectPage

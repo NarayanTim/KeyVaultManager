@@ -1,7 +1,7 @@
 import { useApi } from "@/api/axios/axiosSetup";
 import { addProject, deleteProject, getAllProject, getLatestProject, getProject, updateProjectState } from "@/api/projectAPI";
 import {  useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Project, ProjectInput, ProjectWithKey, UpdateProjectStateInput } from './../@types/project.t';
+import type { Project, ProjectDelete, ProjectInput, ProjectWithKey, UpdateProjectStateInput } from './../@types/project.t';
 
 type InputID = string | number;
 
@@ -69,14 +69,15 @@ export const useGetProject = (id:InputID) => {
 
 export const useDeleteProject = () => {
     const { apiWithAuth } = useApi();
-    return useMutation({
-        queryKey: ["delete_project"],
-        queryFn: (id: InputID) => deleteProject(apiWithAuth, id),
+    const queryClient = useQueryClient();
+    return useMutation<InputID, Error, ProjectDelete>({
+        queryFn: async(id: InputID) => {
+            return await deleteProject(apiWithAuth, id)
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["projects"] });
             queryClient.invalidateQueries({ queryKey: ["project"] });
         },
-        // enabled: !!id,
         retry: 1,
     })
 }

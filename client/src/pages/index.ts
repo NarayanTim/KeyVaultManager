@@ -1,11 +1,11 @@
 import Dashboard from "./Dashboard";
 import Landing from "./Landing";
 import ProjectDetails from "./ProjectDetails";
-import Project from "./Project";
+import ProjectPage from "./ProjectPage";
 
 export {
     Dashboard,
     Landing,
     ProjectDetails,
-    Project,
+    ProjectPage as Project,
 }

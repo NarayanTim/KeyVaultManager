@@ -3,7 +3,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom';
 
 const ProjectDetails = () => {
-  const { projectId } = useParams<{ projectId: string|number }>();
+  const { projectId } = useParams<{ projectId: string }>();
   const { data: project, isLoading } = useGetProject(projectId)
   // console.log("Hi", project)
   return (
