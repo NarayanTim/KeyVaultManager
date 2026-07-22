@@ -11,7 +11,7 @@ interface ColumnProps {
 const getColumns = ({navigate, setSelectedProject, setDeleteModalOpen}: ColumnProps) => [
   {
     key: "name",
-    header: "Project Name",
+    header: "Name",
   },
   {
     key: "status",
@@ -43,7 +43,7 @@ const getColumns = ({navigate, setSelectedProject, setDeleteModalOpen}: ColumnPr
           size="sm"
           onClick={(e) => {
             e.stopPropagation();
-            navigate(`/projects/${item.id}`);
+            navigate(`/project/${item.id}`);
           }}
         >
           View
@@ -52,7 +52,19 @@ const getColumns = ({navigate, setSelectedProject, setDeleteModalOpen}: ColumnPr
         <Button
           variant="ghost"
           size="sm"
-          className="text-error-500 hover:bg-error-50 dark:hover:bg-error-950"
+          className="text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedProject(item);
+          }}
+        >
+          updateState
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
           onClick={(e) => {
             e.stopPropagation();
             setSelectedProject(item);

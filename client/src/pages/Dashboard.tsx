@@ -16,15 +16,16 @@ const Dashboard = () => {
   const maxProjects:number = 10;
   const { data: allProject = [], isLoading } = useGetLatestProjects();
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const navigate = useNavigate();
-  const [selectedProject, setSelectedProject] =useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
 
   const activeProjects = allProject?.length ?? 0;
   const projectsCount = allProject?.length ?? 0;
-  console.log(projectsCount, selectedProject, deleteModalOpen)
+  console.log(projectsCount, selectedProject, deleteModalOpen, " Page Check: ", currentPage)
 
   const columns = getColumns({navigate,setSelectedProject,setDeleteModalOpen});
 
@@ -41,9 +42,6 @@ const Dashboard = () => {
           </p>
         </div>
 
-        {/* Upgrade Banner */}
-
-        {/* KPI Cards - Needs to work on it */}
         <KPI_CARDS projectsCount={projectsCount} activeProjects={activeProjects} maxProjects={maxProjects} />
         <AddProject/>
         {
@@ -60,12 +58,17 @@ const Dashboard = () => {
               <DataTable
                 searchable
                 searchPlaceholder='Search projects...'
-                onRowClick={(p) => navigate(`/projects/${p.id}`)}
                 data={!isLoading ? allProject : []}
+                onRowClick={(p) => navigate(`/project/${p.id}`)}
                 keyExtractor={(p) => p.id}
                 columns={columns}
                 onSearchChange={setSearchQuery}
                 searchValue={searchQuery}
+                paginated
+                pageSize={1}
+                currentPage={currentPage}
+                totalItems={allProject.length}
+                onPageChange={setCurrentPage}
               />
           )
           }

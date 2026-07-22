@@ -13,7 +13,7 @@ router.get("/get/:id", getProject);
 router.patch("/update/:id", updateProjectState);
 
 
-router.delete("/:id", deleteProject);
+router.delete("/delete/:id", deleteProject);
 router.post("/:id/key", recreateProjectKey);
 
 

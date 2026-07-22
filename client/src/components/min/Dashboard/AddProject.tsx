@@ -16,7 +16,7 @@ const AddProject = () => {
             New Project
           </Button>
             </div>
-            <AddProjectModal isOpen={createModalOpen} onClose={()=>setCreateModalOpen(false)}  />
+          <AddProjectModal isOpen={createModalOpen} onClose={()=>setCreateModalOpen(false)}  />
       </>
   )
 }
