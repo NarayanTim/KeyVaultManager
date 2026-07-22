@@ -3,7 +3,7 @@ import { addProject, deleteProject, getAllProject, getLatestProject, getProject,
 import {  useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Project, ProjectDelete, ProjectInput, ProjectWithKey, UpdateProjectStateInput } from './../@types/project.t';
 
-type InputID = string | number;
+type InputID = string;
 
 
 export const useAddProject = () => {
@@ -70,8 +70,8 @@ export const useGetProject = (id:InputID) => {
 export const useDeleteProject = () => {
     const { apiWithAuth } = useApi();
     const queryClient = useQueryClient();
-    return useMutation<InputID, Error, ProjectDelete>({
-        queryFn: async(id: InputID) => {
+    return useMutation<ProjectDelete, Error, InputID>({
+        mutationFn: async(id: InputID) => {
             return await deleteProject(apiWithAuth, id)
         },
         onSuccess: () => {
