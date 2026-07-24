@@ -12,9 +12,9 @@ const envVariablesToSecretPayloads = (variables: EnvVariableInput[]): newType =>
 }
 
 
-export const getAllKey = async (apiWithAuth:ApiWithAuth, id:string):Promise<Secrets> => {
+export const getAllKey = async (apiWithAuth:ApiWithAuth, id:string):Promise<Secrets[]> => {
     const endpoint: string = `key/project/allKeys/${id}`
-    const response = await apiWithAuth<{ keys: Secrets }>({
+    const response = await apiWithAuth<{ keys: Secrets[] }>({
         url: endpoint,
         method: "GET",
     });

@@ -15,10 +15,11 @@ type SaveAllChangeInput = {
 export const useGetAllKeys = (id:InputID) => {
     const { apiWithAuth } = useApi();
     return useQuery<Secrets[]>({
-        queryKey: ["keys", "id"],
+        queryKey: ["keys", id],
         queryFn: () => getAllKey(apiWithAuth, id),
         staleTime: 1000 * 60 * 5, // 5 minutes
         retry: 1,
+        enabled: !!id,
     })
 }
 
