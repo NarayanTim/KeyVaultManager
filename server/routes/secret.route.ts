@@ -7,17 +7,17 @@ const router = Router();
 
 router.use(protectRoute)
 router.get("/project/allKeys/:id", getAllProjectKeys);
-router.post("project/:id", addAPIKey);
-router.patch("project/:id/:secretId", updateKeyStatus);
+// router.post("project/:id", addAPIKey);
+// router.patch("project/:id/:secretId", updateKeyStatus);
 
-router.get("key-value/:id/:projectId", getKeyRealValue);
+router.get("/key-value/:id/:projectId", getKeyRealValue);
 
 // PUT
 // router.patch("project/:id/all", saveAllChange);
-router.put("project/:id/all", saveAllChange);
+router.put("/project/:id/all", saveAllChange);
 
 
-router.delete("project/:id/:secretId", removeApiKey);
+// router.delete("project/:id/:secretId", removeApiKey);
 
 
 

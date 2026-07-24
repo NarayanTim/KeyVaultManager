@@ -29,7 +29,8 @@ export const getAllKey = async (apiWithAuth:ApiWithAuth, id:string):Promise<Secr
 }
 
 export const saveAllChangeCall = async (apiWithAuth:ApiWithAuth, id:string, inputData:EnvVariableInput[]):Promise<Secrets[]> => {
-    const endpoint: string = `key/project/allKeys/${id}`
+    const endpoint: string = `key/project/${id}/all`
+    // project/:id/all
     console.log("Input Data: " + inputData)
     const response = await apiWithAuth<{ keys: Secrets[] }>({
         url: endpoint,
