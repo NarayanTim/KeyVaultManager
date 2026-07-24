@@ -181,6 +181,8 @@ export const saveAllChange = async (req: AuthRequest, res: Response, next: NextF
         }
         
         const receivedInput = req.body
+        console.log("Input Check: ", receivedInput)
+        console.log("Input Check 2 : ", JSON.stringify(receivedInput, null, 2))
         if (!Array.isArray(receivedInput)) {
             return resFail({ res, code: HTTP_STATUS.BAD_REQUEST, message: "Expected an array of variables" });
         }
