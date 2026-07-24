@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 const ProjectDetails = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const { data: project, isLoading } = useGetProject(projectId)
-  const { data: allKeys = [], isKeyLoading } = useGetAllKeys(projectId);
+  const { data: allKeys = [], isLoading:isKeyLoading } = useGetAllKeys(projectId);
 
   return (
     <div className='bg-red-400 text-2xl text-center'>
