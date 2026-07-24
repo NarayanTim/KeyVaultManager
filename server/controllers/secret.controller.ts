@@ -185,7 +185,7 @@ export const getKeyRealValue = async (req: AuthRequest, res: Response, next: Nex
         if (!keyValue) {
             return resFail({ res, code: HTTP_STATUS.NOT_FOUND, message: "API KEY not found" });
         }
-        return resSuccess({res. code:HTTP_STATUS.OK, data:{value:keyValue.value}, message:"The value has been found"})
+        return resSuccess({res, code:HTTP_STATUS.OK, data:{value:keyValue.value}, message:"The value has been found"})
         
     } catch (error) {
         nextTick(error)
