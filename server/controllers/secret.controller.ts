@@ -4,6 +4,7 @@ import {resZodIssue, errorMessage, HTTP_STATUS, resFail, resSuccess } from "../u
 import { getUserProject } from "../lib/project.service.ts"
 import { addProjectAPIKey, deleteProjectSecretKey, getAllSecretsKeys, getSecretById, keyNameExist, saveAllProjectSecrets, updateKeyState } from "../lib/secret.service.ts"
 import { createSecretSchema, type KEY_INPUT } from "../forms/forms.ts"
+import { HTTP_STATUS } from './../utils/res';
 
 
 
@@ -160,6 +161,36 @@ export const removeApiKey = async (req: AuthRequest, res: Response, next: NextFu
     }
 }
 
+
+export const getKeyRealValue = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.userID
+        if (!userId) {
+            return resFail({res, code:HTTP_STATUS.UNAUTHORIZED, message:"User not found"})
+        }
+
+        const projectId = req.params.id?.trim();
+        const id = req.params.id?.trim();
+        if (!projectId || !id) {
+            return resFail({ res, code: HTTP_STATUS.BAD_REQUEST, message: "Project or secrete ID is required" });
+        }
+
+        const project = await getUserProject(userId, projectId)
+        if (!project) {
+            return resFail({ res, code: HTTP_STATUS.NOT_FOUND, message: "Project not found" });
+        }
+        
+        // get the project secrete with id
+        const keyValue = await getSecretById({ projectId: projectId, secretId: id })
+        if (!keyValue) {
+            return resFail({ res, code: HTTP_STATUS.NOT_FOUND, message: "API KEY not found" });
+        }
+        return resSuccess({res. code:HTTP_STATUS.OK, data:{value:keyValue.value}, message:"The value has been found"})
+        
+    } catch (error) {
+        nextTick(error)
+    }
+}
 
 
 /* PUT /projects/:projectId/secrets*/

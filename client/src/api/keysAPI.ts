@@ -30,3 +30,12 @@ export const saveAllChangeCall = async (apiWithAuth:ApiWithAuth, id:string, inpu
     });
     return response.keys
 }
+
+export const getKeyValue = async (apiWithAuth: ApiWithAuth, id: string) => {
+    const endpoint: string = `key/project/allKeys/${id}`
+    const response = await apiWithAuth<{ keys: Secrets[] }>({
+        url: endpoint,
+        method: "GET",
+    });
+    return response.keys
+}

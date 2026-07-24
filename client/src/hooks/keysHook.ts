@@ -25,8 +25,9 @@ export const useGetAllKeys = () => {
 export const useSaveAllChange = () => {
     const { apiWithAuth } = useApi();
     const queryClient = useQueryClient();
+
     return useMutation<Secrets[],Error, SaveAllChangeInput>({
-        mutationFn: async ({id, inputData}) => {
+        mutationFn: async ({id, inputData}:SaveAllChangeInput) => {
             return await saveAllChangeCall(apiWithAuth, id, inputData);
         },
         onSuccess: () => {
