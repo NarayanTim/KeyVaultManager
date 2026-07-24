@@ -7,7 +7,7 @@ import job from "./config/cron.ts";
 
 import { clerkMiddleware } from '@clerk/express'
 // import { userRoute, projectRoute, membershipRoute, secretRoute } from "./routes/index.ts";
-import { userRoute, projectRoute} from "./routes/index.ts";
+import { userRoute, projectRoute, secretRoute} from "./routes/index.ts";
 
 import { errorHandler } from "./middlewares/error.middleware.ts";
 
@@ -56,7 +56,7 @@ app.get("/health", (req, res) => {
 
 app.use("/api/auth", userRoute)
 app.use("/api/project", projectRoute)
-// app.use("/api/secret", secretRoute)
+app.use("/api/key", secretRoute)
 // app.use("/api/membership", membershipRoute)
 app.use(errorHandler)
 

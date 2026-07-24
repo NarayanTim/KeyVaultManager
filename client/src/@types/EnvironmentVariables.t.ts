@@ -5,7 +5,7 @@
 export interface EnvVariableInput {
     key: string;
     value: string;
-    active?: boolean;
+    isActive?: boolean;
 }
 
 
@@ -17,7 +17,7 @@ export interface EnvVariableRow {
     id: string;
     key: string;
     value: string;
-    active: boolean;
+    isActive: boolean;
     status: RowStatus;
     originalKey: string | null;
     originalValue: string | null;
@@ -51,8 +51,8 @@ export interface EnvVarManagerProps {
 export interface Secrets {
     id: string;
     projectId: string;
-    secretName: string;
-    encryptedValue: string;
+    key: string;
+    value: string;
     isActive: boolean;
     createdAt: Date | string;
     updatedAt: Date | string;

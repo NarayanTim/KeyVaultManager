@@ -215,8 +215,6 @@ export const saveAllChange = async (req: AuthRequest, res: Response, next: NextF
             data: { keys: updatedKeys },
             message: "Changes saved",
         });        
-
-
     } catch (error) {
         next(error)
     }

@@ -157,7 +157,7 @@ const EnvVariablesRow = ({ row, editing, onStartEdit, onCancelEdit, onSave, isDu
               </Badge>
             </span>
           )}
-          <ToggleSwitch checked={row.active} disabled={deleted} onChange={() => onToggleActive(row.id)} label="Active" />
+          <ToggleSwitch checked={row.isActive} disabled={deleted} onChange={() => onToggleActive(row.id)} label="Active" />
           <RowMenu
             row={row}
             // onEdit={onStartEdit}

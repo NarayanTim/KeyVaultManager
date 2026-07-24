@@ -11,11 +11,11 @@ export const toRows = (vars: EnvVariableInput[]): EnvVariableRow[]=>  {
         id: makeId(),
         key: v.key,
         value: v.value,
-        active: v.active ?? true,
+        active: v.isActive ?? true,
         status: null,
         originalKey: v.key,
         originalValue: v.value,
-        originalActive: v.active ?? true,
+        originalActive: v.isActive ?? true,
     }));
 }
 
@@ -23,7 +23,7 @@ export const toRows = (vars: EnvVariableInput[]): EnvVariableRow[]=>  {
 export const toPublic = (rows: EnvVariableRow[]): EnvVariableInput[]=>  {
   return rows
     .filter((r) => r.status !== 'deleted')
-    .map((r) => ({ key: r.key, value: r.value, active: r.active }));
+    .map((r) => ({ key: r.key, value: r.value, active: r.isActive }));
 }
  
 // Parses "KEY=value", "export KEY=value", quoted values, blank lines and comments.

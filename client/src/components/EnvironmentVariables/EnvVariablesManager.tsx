@@ -47,7 +47,7 @@ const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables
         id: makeId(),
         key,
         value,
-        active: false, // new variables start inactive until deliberately enabled
+        isActive: false, // new variables start inactive until deliberately enabled
         status: 'added',
         originalKey: null,
         originalValue: null,
@@ -61,7 +61,7 @@ const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables
         prev.map((r) => {
             if (r.id !== id) return r;
             if (r.status === 'added') return { ...r, key, value };
-            const changed = key !== r.originalKey || value !== r.originalValue || r.active !== r.originalActive;
+            const changed = key !== r.originalKey || value !== r.originalValue || r.isActive !== r.originalActive;
             return { ...r, key, value, status: changed ? 'modified' : (null as RowStatus) };
         })
         );
@@ -72,10 +72,10 @@ const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables
         setRows((prev) =>
         prev.map((r) => {
             if (r.id !== id) return r;
-            const nextActive = !r.active;
-            if (r.status === 'added') return { ...r, active: nextActive };
+            const nextActive = !r.isActive;
+            if (r.status === 'added') return { ...r, isActive: nextActive };
             const changed = r.key !== r.originalKey || r.value !== r.originalValue || nextActive !== r.originalActive;
-            return { ...r, active: nextActive, status: changed ? 'modified' : (null as RowStatus) };
+            return { ...r, isActive: nextActive, status: changed ? 'modified' : (null as RowStatus) };
         })
         );
     }
@@ -94,7 +94,7 @@ const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables
         setRows((prev) =>
         prev.map((r) => {
             if (r.id !== id) return r;
-            const changed = r.key !== r.originalKey || r.value !== r.originalValue || r.active !== r.originalActive;
+            const changed = r.key !== r.originalKey || r.value !== r.originalValue || r.isActive !== r.originalActive;
             return { ...r, status: changed ? 'modified' : (null as RowStatus) };
         })
         );
@@ -108,7 +108,7 @@ const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables
                 ...r,
                 key: r.originalKey ?? r.key,
                 value: r.originalValue ?? r.value,
-                active: r.originalActive ?? r.active,
+                isActive: r.originalActive ?? r.isActive,
                 status: null,
                 }
             : r
@@ -132,7 +132,7 @@ const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables
             id: makeId(),
             key,
             value,
-            active: false,
+            isActive: false,
             status: 'added',
             originalKey: null,
             originalValue: null,
@@ -143,7 +143,7 @@ const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables
           if (r.status === 'added') {
             next[idx] = { ...r, value };
           } else {
-            const changed = value !== r.originalValue || r.key !== r.originalKey || r.active !== r.originalActive;
+            const changed = value !== r.originalValue || r.key !== r.originalKey || r.isActive !== r.originalActive;
             next[idx] = { ...r, value, status: changed ? 'modified' : null };
           }
         }
@@ -158,7 +158,7 @@ const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables
     setRows((prev) => {
       const kept = prev
         .filter((r) => r.status !== 'deleted')
-        .map((r) => ({ ...r, status: null as RowStatus, originalKey: r.key, originalValue: r.value, originalActive: r.active }));
+        .map((r) => ({ ...r, status: null as RowStatus, originalKey: r.key, originalValue: r.value, originalActive: r.isActive }));
       return kept;
     });
     setEditingId(null);
@@ -191,7 +191,7 @@ const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables
     return rows.filter((r) => r.key.toLowerCase().includes(q));
   }, [rows, search]);
  
-  const activeCount = rows.filter((r) => r.status !== 'deleted' && r.active).length;
+  const activeCount = rows.filter((r) => r.status !== 'deleted' && r.isActive).length;
   const totalCount = rows.filter((r) => r.status !== 'deleted').length;
  
   return (

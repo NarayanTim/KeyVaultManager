@@ -6,7 +6,7 @@ import { protectRoute } from "../middlewares/auth.ts";
 const router = Router();
 
 router.use(protectRoute)
-router.get("/project/:id", getAllProjectKeys);
+router.get("/project/allKeys/:id", getAllProjectKeys);
 router.post("project/:id", addAPIKey);
 router.patch("project/:id/:secretId", updateKeyStatus);
 router.patch("project/:id/all", saveAllChange);
