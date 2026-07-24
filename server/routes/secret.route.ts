@@ -12,7 +12,11 @@ router.patch("project/:id/:secretId", updateKeyStatus);
 
 router.get("key-value/:id/:projectId", getKeyRealValue);
 
-router.patch("project/:id/all", saveAllChange);
+// PUT
+// router.patch("project/:id/all", saveAllChange);
+router.put("project/:id/all", saveAllChange);
+
+
 router.delete("project/:id/:secretId", removeApiKey);
 
 

@@ -2,19 +2,51 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Search, Save, ClipboardPaste } from 'lucide-react';
 import { Button } from '../ui';
 import { toRows, toPublic, makeId } from './utils';
-import type { RowStatus, EnvVariableRow, EnvVarManagerProps } from "@/@types/EnvironmentVariables.t"
+import type { RowStatus, EnvVariableRow, EnvVarManagerProps, EnvVariableInput } from "@/@types/EnvironmentVariables.t"
 import AddRow from './AddRow';
 import EnvVariablesRow from './EnvVariablesRow';
 import SmartPastePanel from './SmartPastePanel';
+import { useSaveAllChange } from '@/hooks/keysHook';
+import { useParams } from 'react-router-dom';
 
 
 const EnvVariablesManager = ({ initialVariables = [], onSave,onChange,title = 'Environment variables',
-    subtitle,className = '',}:EnvVarManagerProps) => {
-const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables));
+  subtitle, className = '', }: EnvVarManagerProps) => {
+  const { projectId } = useParams<{ projectId: string }>();
+  // Save all change
+
+  const saveAllHook = useSaveAllChange()
+  
+  const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables));
+  
+  // // const [fromData, setFormData] = useState<EnvVariableInput[]>({
+  // //   id: "",
+  // //   key: "",
+  // //   value: "",
+  // //   isActive: true,
+  // // });
+  // const [formData, setFormData] = useState<EnvVariableInput[]>([{
+  //   id: "",
+  //   key: "",
+  //   value: "",
+  //   isActive: true,
+  // }]);
+
   const [search, setSearch] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showPaste, setShowPaste] = useState(false);
- 
+
+
+  const saveMutationCall = () => {
+    const inputData: EnvVariableInput[] = rows.map((row) => ({
+      id: row.id,
+      key: row.key,
+      value: row.value,
+      isActive: row.active,
+    }))
+    saveAllHook.mutate({id:projectId, inputData:inputData})
+  }
+
   // Re-seed if the caller hands us a new initialVariables array (e.g. switching files/environments).
   const initialRef = useRef(initialVariables);
     useEffect(() => {
@@ -35,11 +67,12 @@ const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables
          */
     }, [rows, onChange]);
     
+  
   const isDuplicate = (key: string, excludeId: string | null) => {
     const k = key.trim().toLowerCase();
     return rows.some((r) => r.id !== excludeId && r.status !== 'deleted' && r.key.toLowerCase() === k);
   };
- 
+
   const addRow = (key: string, value: string) => {
     setRows((prev) => [
       ...prev,
@@ -55,66 +88,68 @@ const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables
       },
     ]);
   }
- 
-    const saveEdit = (id: string, key: string, value: string) => {
-        setRows((prev) =>
-        prev.map((r) => {
-            if (r.id !== id) return r;
-            if (r.status === 'added') return { ...r, key, value };
-            const changed = key !== r.originalKey || value !== r.originalValue || r.isActive !== r.originalActive;
-            return { ...r, key, value, status: changed ? 'modified' : (null as RowStatus) };
-        })
-        );
-        setEditingId(null);
-    }
+
+
+  const saveEdit = (id: string, key: string, value: string) => {
+    setRows((prev) =>
+      prev.map((r) => {
+          if (r.id !== id) return r;
+          if (r.status === 'added') return { ...r, key, value };
+          const changed = key !== r.originalKey || value !== r.originalValue || r.isActive !== r.originalActive;
+          return { ...r, key, value, status: changed ? 'modified' : (null as RowStatus) };
+      })
+      );
+    setEditingId(null);
+    saveMutationCall();
+  }
     
-    const toggleActive = (id: string) => {
-        setRows((prev) =>
-        prev.map((r) => {
-            if (r.id !== id) return r;
-            const nextActive = !r.isActive;
-            if (r.status === 'added') return { ...r, isActive: nextActive };
-            const changed = r.key !== r.originalKey || r.value !== r.originalValue || nextActive !== r.originalActive;
-            return { ...r, isActive: nextActive, status: changed ? 'modified' : (null as RowStatus) };
-        })
-        );
-    }
+  const toggleActive = (id: string) => {
+      setRows((prev) =>
+      prev.map((r) => {
+          if (r.id !== id) return r;
+          const nextActive = !r.isActive;
+          if (r.status === 'added') return { ...r, isActive: nextActive };
+          const changed = r.key !== r.originalKey || r.value !== r.originalValue || nextActive !== r.originalActive;
+          return { ...r, isActive: nextActive, status: changed ? 'modified' : (null as RowStatus) };
+      })
+      );
+  }
     
-    const deleteRow = (id: string) => {
-        setRows((prev) => {
-        const target = prev.find((r) => r.id === id);
-        if (!target) return prev;
-        if (target.status === 'added') return prev.filter((r) => r.id !== id);
-        return prev.map((r) => (r.id === id ? { ...r, status: 'deleted' as RowStatus } : r));
-        });
-        if (editingId === id) setEditingId(null);
-    }
+  const deleteRow = (id: string) => {
+      setRows((prev) => {
+      const target = prev.find((r) => r.id === id);
+      if (!target) return prev;
+      if (target.status === 'added') return prev.filter((r) => r.id !== id);
+      return prev.map((r) => (r.id === id ? { ...r, status: 'deleted' as RowStatus } : r));
+      });
+      if (editingId === id) setEditingId(null);
+  }
     
-    const restoreRow = (id: string) => {
-        setRows((prev) =>
-        prev.map((r) => {
-            if (r.id !== id) return r;
-            const changed = r.key !== r.originalKey || r.value !== r.originalValue || r.isActive !== r.originalActive;
-            return { ...r, status: changed ? 'modified' : (null as RowStatus) };
-        })
-        );
-    }
+  const restoreRow = (id: string) => {
+      setRows((prev) =>
+      prev.map((r) => {
+          if (r.id !== id) return r;
+          const changed = r.key !== r.originalKey || r.value !== r.originalValue || r.isActive !== r.originalActive;
+          return { ...r, status: changed ? 'modified' : (null as RowStatus) };
+      })
+      );
+  }
     
-    const revertRow = (id: string) => {
-        setRows((prev) =>
-        prev.map((r) =>
-            r.id === id
-            ? {
-                ...r,
-                key: r.originalKey ?? r.key,
-                value: r.originalValue ?? r.value,
-                isActive: r.originalActive ?? r.isActive,
-                status: null,
-                }
-            : r
-        )
-        );
-    }
+  const revertRow = (id: string) => {
+      setRows((prev) =>
+      prev.map((r) =>
+          r.id === id
+          ? {
+              ...r,
+              key: r.originalKey ?? r.key,
+              value: r.originalValue ?? r.value,
+              isActive: r.originalActive ?? r.isActive,
+              status: null,
+              }
+          : r
+      )
+      );
+  }
  
   const copyValue = (value: string)=>  {
     navigator.clipboard?.writeText(value).catch(() => {
@@ -152,7 +187,7 @@ const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables
     });
     setShowPaste(false);
   }
- 
+
   const saveAll = () =>{
     onSave?.(toPublic(rows));
     setRows((prev) => {
@@ -162,13 +197,15 @@ const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables
       return kept;
     });
     setEditingId(null);
+    console.log("Save to Db: Called ---")
+    saveMutationCall();
   }
- 
+
   const discardAll = ()=> {
     setRows(toRows(initialVariables));
     setEditingId(null);
   }
- 
+
   const counts = useMemo(
     () =>
       rows.reduce(

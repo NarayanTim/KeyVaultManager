@@ -1,4 +1,5 @@
-import { getAuth, requireAuth } from "@clerk/express";
+// import { getAuth, requireAuth } from "@clerk/express";
+import { getAuth } from "@clerk/express";
 import type { Request, Response, NextFunction } from "express";
 import { errorMessage, HTTP_STATUS, resFail } from "../utils/res.ts";
 import { getUserWithClerkID } from "../lib/user.service.ts";
@@ -9,7 +10,7 @@ export type AuthRequest = Request & {
 }
 
 export const protectRoute = [
-    requireAuth(),
+    // requireAuth(),
     async (req: AuthRequest, res: Response, next: NextFunction) => {
         try {
             const { userId: clerkID } = getAuth(req)

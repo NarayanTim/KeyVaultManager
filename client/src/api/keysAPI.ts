@@ -5,22 +5,6 @@ import {  type ApiWithAuth } from "./axios/axiosSetup";
 type SaveSecretPayloadItem = EnvVariableInput;
 
 
-
-// const toSavePayload = (variable: EnvVariableInput): SaveSecretPayloadItem => {
-//     const item: SaveSecretPayloadItem = {
-//         key: variable.key,
-//         value: variable.value,
-//         isActive: variable.isActive ?? true,
-//     };
-//     if (variable.id) {
-//         item.id = variable.id;
-//     }
-//     if (variable.value !== undefined) {
-//         item.value = variable.value;
-//     }
-//     return item;
-// }
-
 const toSavePayload = (variable: EnvVariableInput): SaveSecretPayloadItem => ({
     id: variable.id,
     key: variable.key,
@@ -46,6 +30,7 @@ export const getAllKey = async (apiWithAuth:ApiWithAuth, id:string):Promise<Secr
 
 export const saveAllChangeCall = async (apiWithAuth:ApiWithAuth, id:string, inputData:EnvVariableInput[]):Promise<Secrets[]> => {
     const endpoint: string = `key/project/allKeys/${id}`
+    console.log("Input Data: " + inputData)
     const response = await apiWithAuth<{ keys: Secrets[] }>({
         url: endpoint,
         method: "PUT",

@@ -23,7 +23,7 @@ export const useGetAllKeys = (id:InputID) => {
     })
 }
 
-export const useSaveAllChange = () => {
+export const  useSaveAllChange = () => {
     const { apiWithAuth } = useApi();
     const queryClient = useQueryClient();
 
