@@ -42,7 +42,7 @@ const EnvVariablesManager = ({ initialVariables = [], onSave,onChange,title = 'E
       id: row.id,
       key: row.key,
       value: row.value,
-      isActive: row.active,
+      isActive: row.isActive,
     }))
     saveAllHook.mutate({id:projectId, inputData:inputData})
   }
