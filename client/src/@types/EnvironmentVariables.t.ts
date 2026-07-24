@@ -3,6 +3,7 @@
 /* ------------------------------------------------------------------ */
 /** Shape callers pass in / get back out of <EnvVarManager />. No internal bookkeeping fields. */
 export interface EnvVariableInput {
+    id?: string;
     key: string;
     value: string;
     isActive?: boolean;

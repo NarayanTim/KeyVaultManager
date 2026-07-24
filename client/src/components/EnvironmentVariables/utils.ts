@@ -11,7 +11,7 @@ export const toRows = (vars: EnvVariableInput[]): EnvVariableRow[]=>  {
         id: makeId(),
         key: v.key,
         value: v.value,
-        active: v.isActive ?? true,
+        isActive: v.isActive ?? true,
         status: null,
         originalKey: v.key,
         originalValue: v.value,

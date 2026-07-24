@@ -12,9 +12,8 @@ const AddRow = ({onAdd, isDuplicate}:Adding) => {
 const [key, setKey] = useState('');
   const [value, setValue] = useState('');
   const keyRef = useRef<HTMLInputElement>(null);
- 
+
   const dup = key.trim() !== '' && isDuplicate(key.trim(), null);
- 
     
     const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>)=> {
     const text = e.clipboardData.getData("text").trim();
