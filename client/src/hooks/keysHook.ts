@@ -6,6 +6,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 
 type InputID = string;
+
+type SaveAllChangeInput = {
+    id: InputID;
+    inputData: EnvVariableInput[];
+};
+
 export const useGetAllKeys = () => {
     const { apiWithAuth } = useApi();
     return useQuery<Secrets[]>({
@@ -19,8 +25,8 @@ export const useGetAllKeys = () => {
 export const useSaveAllChange = () => {
     const { apiWithAuth } = useApi();
     const queryClient = useQueryClient();
-    return useMutation<Secrets[],Error, Secrets[]>({
-        mutationFn: (id:InputID, inputData:EnvVariableInput[]) => {
+    return useMutation<Secrets[],Error, SaveAllChangeInput>({
+        mutationFn: async (id:InputID, inputData:EnvVariableInput[]) => {
             return await saveAllChangeCall(apiWithAuth, id, inputData);
         },
         onSuccess: () => {

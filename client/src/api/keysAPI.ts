@@ -2,7 +2,10 @@ import type { EnvVariableInput, Secrets } from "@/@types/EnvironmentVariables.t"
 import {  type ApiWithAuth } from "./axios/axiosSetup";
 
 
-type newType  = Pick<Secrets, 'key' | 'value' | 'isActive'>[]
+type newType = Pick<Secrets, 'key' | 'value' | 'isActive'>[]
+
+
+
 
 const envVariablesToSecretPayloads = (variables: EnvVariableInput[]): newType =>  {
   return variables.map(envVariableToSecretPayload);
