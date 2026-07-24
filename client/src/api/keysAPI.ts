@@ -2,13 +2,36 @@ import type { EnvVariableInput, Secrets } from "@/@types/EnvironmentVariables.t"
 import {  type ApiWithAuth } from "./axios/axiosSetup";
 
 
-type newType = Pick<Secrets, 'key' | 'value' | 'isActive'>[]
+type SaveSecretPayloadItem = EnvVariableInput;
 
 
+// const envVariableToSecretPayload = (variable: EnvVariableInput): newType => {
+//     return {
+//         key: variable.key,
+//         value: variable.value,
+//         isActive: variable.active ?? true,
+//     };
+// }
 
 
-const envVariablesToSecretPayloads = (variables: EnvVariableInput[]): newType =>  {
-  return variables.map(envVariableToSecretPayload);
+// const envVariablesToSecretPayloads = (variables: EnvVariableInput[]): newType =>  {
+//     return variables.map(envVariableToSecretPayload);
+    
+// }
+
+
+function toSavePayload(variable: EnvVariableInput): SaveSecretPayloadItem {
+  const item: SaveSecretPayloadItem = {
+    key: variable.key,
+    active: variable.active ?? true,
+  };
+  if (variable.id) item.id = variable.id;
+  if (variable.value !== undefined) item.value = variable.value;
+  return item;
+}
+ 
+function toSavePayloads(variables: EnvVariableInput[]): SaveSecretPayloadItem[] {
+  return variables.map(toSavePayload);
 }
 
 
@@ -26,7 +49,7 @@ export const saveAllChangeCall = async (apiWithAuth:ApiWithAuth, id:string, inpu
     const response = await apiWithAuth<{ keys: Secrets[] }>({
         url: endpoint,
         method: "PUT",
-        data: JSON.stringify(envVariablesToSecretPayloads(inputData)),
+        data:toSavePayloads(inputData),
     });
     return response.keys
 }
