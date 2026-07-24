@@ -5,36 +5,33 @@ import {  type ApiWithAuth } from "./axios/axiosSetup";
 type SaveSecretPayloadItem = EnvVariableInput;
 
 
-// const envVariableToSecretPayload = (variable: EnvVariableInput): newType => {
-//     return {
+
+// const toSavePayload = (variable: EnvVariableInput): SaveSecretPayloadItem => {
+//     const item: SaveSecretPayloadItem = {
 //         key: variable.key,
 //         value: variable.value,
-//         isActive: variable.active ?? true,
+//         isActive: variable.isActive ?? true,
 //     };
+//     if (variable.id) {
+//         item.id = variable.id;
+//     }
+//     if (variable.value !== undefined) {
+//         item.value = variable.value;
+//     }
+//     return item;
 // }
 
-
-// const envVariablesToSecretPayloads = (variables: EnvVariableInput[]): newType =>  {
-//     return variables.map(envVariableToSecretPayload);
-    
-// }
-
-
-function toSavePayload(variable: EnvVariableInput): SaveSecretPayloadItem {
-  const item: SaveSecretPayloadItem = {
+const toSavePayload = (variable: EnvVariableInput): SaveSecretPayloadItem => ({
+    id: variable.id,
     key: variable.key,
+    value: variable.value,
     isActive: variable.isActive ?? true,
-  };
-    if (variable.id) {
-        item.id = variable.id;
-    }
-  if (variable.value !== undefined) item.value = variable.value;
-  return item;
-}
+});
 
 
-function toSavePayloads(variables: EnvVariableInput[]): SaveSecretPayloadItem[] {
-  return variables.map(toSavePayload);
+
+const toSavePayloads = (variables: EnvVariableInput[]): SaveSecretPayloadItem[] => {
+    return variables.map(toSavePayload);
 }
 
 
