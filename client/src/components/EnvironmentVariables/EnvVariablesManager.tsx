@@ -19,18 +19,6 @@ const EnvVariablesManager = ({ initialVariables = [], onSave,onChange,title = 'E
   
   const [rows, setRows] = useState<EnvVariableRow[]>(() => toRows(initialVariables));
   
-  // // const [fromData, setFormData] = useState<EnvVariableInput[]>({
-  // //   id: "",
-  // //   key: "",
-  // //   value: "",
-  // //   isActive: true,
-  // // });
-  // const [formData, setFormData] = useState<EnvVariableInput[]>([{
-  //   id: "",
-  //   key: "",
-  //   value: "",
-  //   isActive: true,
-  // }]);
 
   const [search, setSearch] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -80,7 +68,7 @@ const EnvVariablesManager = ({ initialVariables = [], onSave,onChange,title = 'E
         id: makeId(),
         key,
         value,
-        isActive: false, // new variables start inactive until deliberately enabled
+        isActive: true, // new variables start active until deliberately enabled
         status: 'added',
         originalKey: null,
         originalValue: null,

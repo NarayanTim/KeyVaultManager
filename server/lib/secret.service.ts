@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import db from "../config/db.ts";
 import { encryptAPIKey } from "../utils/security.ts";
 import { projects, secrets } from "../models/index.ts";
