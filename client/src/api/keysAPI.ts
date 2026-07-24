@@ -23,13 +23,16 @@ type SaveSecretPayloadItem = EnvVariableInput;
 function toSavePayload(variable: EnvVariableInput): SaveSecretPayloadItem {
   const item: SaveSecretPayloadItem = {
     key: variable.key,
-    active: variable.active ?? true,
+    isActive: variable.isActive ?? true,
   };
-  if (variable.id) item.id = variable.id;
+    if (variable.id) {
+        item.id = variable.id;
+    }
   if (variable.value !== undefined) item.value = variable.value;
   return item;
 }
- 
+
+
 function toSavePayloads(variables: EnvVariableInput[]): SaveSecretPayloadItem[] {
   return variables.map(toSavePayload);
 }
