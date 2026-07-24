@@ -15,18 +15,16 @@ const ProjectPage = () => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1)
 
-    // const [projectState, setProjectState] =useState<UpdateProjectStateInput>({isActive: false});
-
     const { data: allProject = [], isLoading } = useGetProjects()
     const deleteMutation = useDeleteProject();
     const updateProjectState = useUpdateProjectState()
 
     const navigate = useNavigate();
+
+
     const [selectedProject, setSelectedProject] =useState<Project | null>(null);
-    
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
-    
     
     const onUpdateProjectState = (project: Project) => {
         if (!project) return;
@@ -47,7 +45,6 @@ const ProjectPage = () => {
     }
     
     const columns = getColumns({ navigate, setSelectedProject, setDeleteModalOpen, onUpdateProjectState });
-    // console.log(searchQuery, currentPage, setCurrentPage, setSearchQuery, deleteModalOpen)
     return (    
         <DashboardLayout>
         <div className="max-w-6xl mx-auto">
@@ -105,8 +102,7 @@ const ProjectPage = () => {
                 variant='danger'
                 loading={deleteMutation.isPending}
             
-            />
-
+                />
         </DashboardLayout>
     )
 }

@@ -3,8 +3,8 @@ import validator from "validator"
 
 
 export const createSecretSchema = z.object({
-    secretName: z.string().trim().min(1, "Secret Name").max(200, "Secret Name is too long"),
-    encryptedValue: z.string().trim().min(1, "Key Value is required").min(1, "Key Value is too short"),
+    key: z.string().trim().min(1, "Secret Name").max(200, "Secret Name is too long"),
+    value: z.string(),
     isActive: z.preprocess(
         (value) => {
             if (typeof value === "boolean") return value;
@@ -39,5 +39,5 @@ export const createProjectSchema = z.object({
 })
 
 
-export type apiSecretForm = z.infer<typeof createSecretSchema>;
+export type KEY_INPUT = z.infer<typeof createSecretSchema>;
 export type projectAddForm = z.infer<typeof createProjectSchema>;

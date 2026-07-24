@@ -3,7 +3,13 @@ import { FolderKanban, Activity } from 'lucide-react'
 import React from 'react'
 
 
-const KPI_CARDS = ({projectsCount, activeProjects, maxProjects}:{projectsCount:number, activeProjects:number, maxProjects:number}) => {
+interface KPI_CARD_TYPE{
+  projectsCount: number;
+  activeProjects: number;
+  maxProjects: number;
+}
+
+const KPI_CARDS = ({projectsCount, activeProjects, maxProjects}:KPI_CARD_TYPE) => {
   return (
        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
           <Card className="p-6">

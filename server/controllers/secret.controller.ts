@@ -2,8 +2,10 @@ import type { AuthRequest } from "../middlewares/auth.ts"
 import type { Response, Request, NextFunction } from "express"
 import {resZodIssue, errorMessage, HTTP_STATUS, resFail, resSuccess } from "../utils/res.ts"
 import { getUserProject } from "../lib/project.service.ts"
-import { addProjectAPIKey, deleteProjectSecretKey, getAllSecretsKeys, getSecretById, keyNameExist, updateKeyState } from "../lib/secret.service.ts"
-import { createSecretSchema } from "../forms/forms.ts"
+import { addProjectAPIKey, deleteProjectSecretKey, getAllSecretsKeys, getSecretById, keyNameExist, saveAllProjectSecrets, updateKeyState } from "../lib/secret.service.ts"
+import { createSecretSchema, type KEY_INPUT } from "../forms/forms.ts"
+
+
 
 export const addAPIKey = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
@@ -31,13 +33,13 @@ export const addAPIKey = async (req: AuthRequest, res: Response, next: NextFunct
             });
         }
 
-        const { secretName, encryptedValue } = result.data;
-        const alreadyExists = await keyNameExist({ projectId, secretName });
+        const { key, value } = result.data;
+        const alreadyExists = await keyNameExist({ projectId, key });
         if (alreadyExists) {
             return resFail({ res, code: HTTP_STATUS.CONFLICT, message: "Secret name already exists in this project" });
         }
 
-        const newAPIKey = await addProjectAPIKey({ userID, projectID, keyName:secretName, keyValue:encryptedValue })
+        const newAPIKey = await addProjectAPIKey({ userID, projectID, keyName:key, keyValue:value })
         if (!newAPIKey) {
             return resFail({ res, code: HTTP_STATUS.INTERNAL_SERVER_ERROR, message: "Failed to create secret" });
         }
@@ -45,7 +47,7 @@ export const addAPIKey = async (req: AuthRequest, res: Response, next: NextFunct
             res, code: HTTP_STATUS.CREATED,
             data: {
                 id: newAPIKey.id,
-                secretName : newAPIKey.secretName,
+                key : newAPIKey.key,
             },
             message: "Secret created successfully"
         })
@@ -109,7 +111,7 @@ export const updateKeyStatus = async (req: AuthRequest, res: Response, next: Nex
         return resSuccess({
             res,
             code: HTTP_STATUS.OK,
-            data: { secretName: updatedKey.secretName, isActive: updatedKey.isActive },
+            data: { key: updatedKey.key, isActive: updatedKey.isActive },
             message: "Secret state updated",
         });
 
@@ -149,9 +151,71 @@ export const removeApiKey = async (req: AuthRequest, res: Response, next: NextFu
         return resSuccess({
             res,
             code: HTTP_STATUS.OK,
-            data: { name: deleted.secretName },
+            data: { key: deleted.key },
             message: "Secret removed",
         });
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+
+/* PUT /projects/:projectId/secrets*/
+export const saveAllChange = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.userID
+        if (!userId) {
+            return resFail({res, code:HTTP_STATUS.UNAUTHORIZED, message:"User not found"})
+        }
+
+        const projectId = req.params.id?.trim();
+        if (!projectId) {
+            return resFail({ res, code: HTTP_STATUS.BAD_REQUEST, message: "Project ID is required" });
+        }
+
+        const project = await getUserProject(userId, projectId)
+        if (!project) {
+            return resFail({ res, code: HTTP_STATUS.NOT_FOUND, message: "Project not found" });
+        }
+        
+        const receivedInput = req.body
+        if (!Array.isArray(receivedInput)) {
+            return resFail({ res, code: HTTP_STATUS.BAD_REQUEST, message: "Expected an array of variables" });
+        }
+
+        const seen = new Set<string>()
+        const validated: KEY_INPUT[] = []
+
+        for (const v of receivedInput) {
+            const result = createSecretSchema.safeParse(v);
+            if (!result.success) {
+                return resFail({
+                    res,
+                    code: HTTP_STATUS.BAD_REQUEST,
+                    message: resZodIssue(result.error.issues),
+                });
+            }
+            const lower = result.data.key.toLocaleLowerCase()
+            if (seen.has(lower)) {
+                return resFail({
+                    res,
+                    code: HTTP_STATUS.BAD_REQUEST,
+                    message:`Duplicate key: "${v.key}"`,
+                });
+            }
+            seen.add(lower)
+            validated.push(result.data)
+        }
+        const updatedKeys = await saveAllProjectSecrets({ projectId, variables: validated })
+        return resSuccess({
+            res,
+            code: HTTP_STATUS.OK,
+            data: { keys: updatedKeys },
+            message: "Changes saved",
+        });        
+
 
     } catch (error) {
         next(error)
